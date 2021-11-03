@@ -121,6 +121,22 @@ def mixingConfigRefMap = "mixins." + modId + ".refmap.json"
 def refMap = "${tasks.compileJava.temporaryDir}" + File.separator + mixingConfigRefMap
 def mixinSrg = "${tasks.reobf.temporaryDir}" + File.separator + "mixins.srg"
 
+task generateAssets {
+    if(usesMixins.toBoolean()) {
+        new File(projectDir.toString() + "/src/main/resources/", mixinConfigJson).text = """{
+  "required": true,
+  "minVersion": "0.7.11",
+  "package": "${modGroup}.${mixinsPackage}",
+  "plugin": "${modGroup}.${mixinPlugin}",
+  "refmap": "${mixingConfigRefMap}",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8"
+}
+
+"""
+    }
+}
+
 shadowJar {
     if(usesMixins.toBoolean()) {
         from refMap
@@ -206,10 +222,7 @@ processResources
         expand "minecraftVersion": project.minecraft.version,
                 "modVersion": versionDetails().lastTag,
                 "modId": modId,
-                "modName": modName,
-                "modDescription": modDescription,
-                "modUrl": modUrl,
-                "modCredits": modCredits
+                "modName": modName
     }
 
     // copy everything else, thats not the mcmod.info
