@@ -232,11 +232,11 @@ task devJar(type: Jar) {
 
 task apiJar(type: Jar) {
     from (sourceSets.main.allJava) {
-        include apiPackage + '/**'
+        include modGroup.toString().replaceAll("\\.", "/") + "/" + apiPackage.toString() + '/**'
     }
 
     from (sourceSets.main.output) {
-        include apiPackage + '/**'
+        include modGroup.toString().replaceAll("\\.", "/") + "/" + apiPackage.toString() + '/**'
     }
 
     from (sourceSets.main.resources.srcDirs) {

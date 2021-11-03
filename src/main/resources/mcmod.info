@@ -2,13 +2,13 @@
     {
       "modid": "${modId}",
       "name": "${modName}",
-      "description": "${modDescription}",
+      "description": "An example mod for Minecraft 1.7.10 with Forge focussed on a stable setup.",
       "version": "${modVersion}",
       "mcversion": "${minecraftVersion}",
-      "url": "${modUrl}",
+      "url": "https://github.com/SinTh0r4s/MyMod",
       "updateUrl": "",
-      "authorList": ["MyName"],
-      "credits": "${modCredits}",
+      "authorList": ["SinTho0r4s"],
+      "credits": "",
       "logoFile": "",
       "screenshots": [],
       "dependencies": []
