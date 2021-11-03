@@ -17,7 +17,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.github.SinTh0r4s:ForgeGradle:FG_1.2-SNAPSHOT'
+        classpath 'com.github.GTNH2:ForgeGradle:FG_1.2-SNAPSHOT'
     }
 }
 
