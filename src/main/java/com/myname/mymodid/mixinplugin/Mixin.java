@@ -16,7 +16,7 @@ public enum Mixin {
 
     public final String mixinClass;
     public final TargetedMod targetedMod;
-    // Injecting into GUI classes will crash the server. Flag them as clientSideOnly!
+    // Injecting into @SideOnly(Side.Client) classes will crash the server. Flag them as clientSideOnly!
     public final boolean clientSideOnly;
 
     Mixin(String mixinClass, TargetedMod targetedMod, boolean clientSideOnly) {
