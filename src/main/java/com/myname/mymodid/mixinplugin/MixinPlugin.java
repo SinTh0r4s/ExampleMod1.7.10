@@ -40,14 +40,27 @@ public class MixinPlugin implements IMixinConfigPlugin {
 
     }
 
+    // This method return a List<String> of mixins. Every mixins in this list will be loaded.
     @Override
     public List<String> getMixins() {
         final boolean loadClientSideOnlyClasses = FMLLaunchHandler.side().isClient();
         final boolean isDevelopmentEnvironment = (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
 
+        //
+        // IMPORTANT: Do not make any references to any mod from this file. This file is loaded quite early on and if
+        // you refer to other mods you load them as well. The consequence is: You can't inject any previously loaded classes!
+        //
+
         List<String> mixins = new ArrayList<>();
+        // We may add vanilla mixins at all times. Vanilla Minecraft is guaranteed to be on the class path
         mixins.add("minecraft.ItemEditableBookMixin");
 
+        // If we inject into another mod we need to ensure it is available on the classpath. Some mods are, some are not.
+        // loadJar() will ensure it is available and return false if a mod is not installed.
+
+        // Additionally, we don't have the other mod in /mods during development runs. If you want a mixin to be applied
+        // at development you should allow its addition with an additional check to isDevelopmentEnvironment. If your
+        // dependency is optional, eg added as compileOnly dependency, you must skip the test against isDevelopmentEnvironment!
         if(isDevelopmentEnvironment || loadJar("gregtech")) {
             LOG.info("Found GregTech! Integrating now...");
             //mixins.add("gregtech.SOMEGTMIXINEXAMPLE");
