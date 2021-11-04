@@ -1,5 +1,9 @@
 // Add your dependencies here
 
 dependencies {
-    
+    compileOnly("com.github.GTNewHorizons:GT5-Unofficial:experimental-SNAPSHOT:dev") {
+        // Only get GT5U and not its dependencies, since it won't be run in dev. It is an optional dependency
+        transitive = false
+        setChanging(true)
+    }
 }
