@@ -40,6 +40,5 @@ If you tried out this build script we would love to head your opinion! Is there 
 You may activate Mixin in 'gradle.properties'. In that case a mixin configuration (usually named `mixins.mymodid.json`) will be generated automatically, and you only have to write the mixins itself. Dependencies are handled as well.
 Take a look at the examples in [`com.myname.mymodid.mixinplugin.MixinPlugin`](https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/src/main/java/com/myname/mymodid/mixinplugin/MixinPlugin.java) and [`com.myname.mymodid.mixins.*`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/main/src/main/java/com/myname/mymodid/mixins). The use of a MixinPlugin allows the injection into any mod and not just vanilla Minecraft.
 
-Happy modding!
-Cheers,
-@SinTh0r4s, @TheElan and @basdxz
+Happy modding, \
+[SinTh0r4s](https://github.com/SinTh0r4s), [TheElan](https://github.com/TheElan) and [basdxz](https://github.com/basdxz)
