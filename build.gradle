@@ -1,3 +1,11 @@
+/*
+DO NOT CHANGE THIS FILE!
+
+Also, you may replace this file at any time if there is an update available.
+Please check https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/build.gradle for updates.
+ */
+
+
 import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
 import java.util.concurrent.TimeUnit
 
@@ -40,6 +48,10 @@ idea {
 
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
+
+    // Make sure GregTech build won't time out
+    System.setProperty("org.gradle.internal.http.connectionTimeout", 120000 as String)
+    System.setProperty("org.gradle.internal.http.socketTimeout", 120000 as String)
 }
 
 // Pulls version from git tag
