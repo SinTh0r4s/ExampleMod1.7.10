@@ -1,5 +1,8 @@
 package com.myname.mymodid.mixinplugin;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.myname.mymodid.mixinplugin.TargetedMod.*;
 
 public enum Mixin {
@@ -11,17 +14,18 @@ public enum Mixin {
     //
 
     // Replace with your own mixins:
-    ItemEditableBookMixin("minecraft.ItemEditableBookMixin", VANILLA, false),
-    GT_Block_Ores_AbstractMixin("gregtech.GT_Block_Ores_AbstractMixin", GREGTECH, false);
+    ItemEditableBookMixin("minecraft.ItemEditableBookMixin", false, VANILLA),
+    // You may also require multiple mods to be loaded if your mixin requires both
+    GT_Block_Ores_AbstractMixin("gregtech.GT_Block_Ores_AbstractMixin", false, GREGTECH, VANILLA);
 
     public final String mixinClass;
-    public final TargetedMod targetedMod;
+    public final List<TargetedMod> targetedMods;
     // Injecting into @SideOnly(Side.Client) classes will crash the server. Flag them as clientSideOnly!
     public final boolean clientSideOnly;
 
-    Mixin(String mixinClass, TargetedMod targetedMod, boolean clientSideOnly) {
+    Mixin(String mixinClass, boolean clientSideOnly, TargetedMod... targetedMods) {
         this.mixinClass = mixinClass;
-        this.targetedMod = targetedMod;
+        this.targetedMods = Arrays.asList(targetedMods);
         this.clientSideOnly = clientSideOnly;
     }
 }

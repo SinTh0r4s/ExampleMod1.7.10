@@ -13,12 +13,16 @@ import ru.timeconqueror.spongemixins.MinecraftURLClassPath;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import static com.myname.mymodid.mixinplugin.TargetedMod.VANILLA;
 
 public class MixinPlugin implements IMixinConfigPlugin {
 
-    private static Logger LOG = LogManager.getLogger(Tags.MODID + " mixins");
+    private static final Logger LOG = LogManager.getLogger(Tags.MODID + " mixins");
 
     @Override
     public void onLoad(String mixinPackage) {
@@ -46,25 +50,28 @@ public class MixinPlugin implements IMixinConfigPlugin {
         final boolean loadClientSideOnlyClasses = FMLLaunchHandler.side().isClient();
         final boolean isDevelopmentEnvironment = (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
 
-        List<String> mixins = new ArrayList<>();
-        for (TargetedMod targetedMod : TargetedMod.values()) {
-            if (targetedMod == TargetedMod.VANILLA
-                    || (targetedMod.loadInDevelopment && isDevelopmentEnvironment)
-                    || loadJar(targetedMod.jarNameBeginsWith)) {
-                LOG.info("Found " + targetedMod.modName + "! Integrating now...");
-                for (Mixin mixin : Mixin.values()) {
-                    if (mixin.targetedMod == targetedMod
-                            && (mixin.clientSideOnly == false || loadClientSideOnlyClasses)) {
-                        mixins.add(mixin.mixinClass);
-                        LOG.debug("Loading mixin: " + mixin.mixinClass);
-                    }
-                }
+        List<TargetedMod> loadedMods = Arrays.stream(TargetedMod.values())
+                .filter(mod -> mod == VANILLA
+                        || (mod.loadInDevelopment && isDevelopmentEnvironment)
+                        || loadJar(mod.jarNameBeginsWith))
+                .collect(Collectors.toList());
+        for (TargetedMod mod : TargetedMod.values()) {
+            if(loadedMods.contains(mod)) {
+                LOG.info("Found " + mod.modName + "! Integrating now...");
             }
             else {
-                LOG.info("Could not find " + targetedMod.modName + "! Skipping integration....");
+                LOG.info("Could not find " + mod.modName + "! Skipping integration....");
             }
         }
 
+        List<String> mixins = new ArrayList<>();
+        for (Mixin mixin : Mixin.values()) {
+            if (loadedMods.containsAll(mixin.targetedMods)
+                    && (mixin.clientSideOnly == false || loadClientSideOnlyClasses)) {
+                mixins.add(mixin.mixinClass);
+                LOG.debug("Loading mixin: " + mixin.mixinClass);
+            }
+        }
         return mixins;
     }
 
