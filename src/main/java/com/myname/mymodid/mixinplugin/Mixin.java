@@ -14,18 +14,15 @@ public enum Mixin {
     //
 
     // Replace with your own mixins:
-    ItemEditableBookMixin("minecraft.ItemEditableBookMixin", false, VANILLA),
+    ItemEditableBookMixin("minecraft.ItemEditableBookMixin", VANILLA),
     // You may also require multiple mods to be loaded if your mixin requires both
-    GT_Block_Ores_AbstractMixin("gregtech.GT_Block_Ores_AbstractMixin", false, GREGTECH, VANILLA);
+    GT_Block_Ores_AbstractMixin("gregtech.GT_Block_Ores_AbstractMixin", GREGTECH, VANILLA);
 
     public final String mixinClass;
     public final List<TargetedMod> targetedMods;
-    // Injecting into @SideOnly(Side.Client) classes will crash the server. Flag them as clientSideOnly!
-    public final boolean clientSideOnly;
 
-    Mixin(String mixinClass, boolean clientSideOnly, TargetedMod... targetedMods) {
+    Mixin(String mixinClass, TargetedMod... targetedMods) {
         this.mixinClass = mixinClass;
         this.targetedMods = Arrays.asList(targetedMods);
-        this.clientSideOnly = clientSideOnly;
     }
 }
