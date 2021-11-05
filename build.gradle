@@ -215,7 +215,7 @@ runClient {
 }
 
 runServer {
-    args    "",//"--mods=../build/libs/$modId-${version}.jar",
+    args    "--mods=../build/libs/$modId-${version}.jar",
             usesMixins.toBoolean() ? "--tweakClass org.spongepowered.asm.launch.MixinTweaker" : ""
 
 }
