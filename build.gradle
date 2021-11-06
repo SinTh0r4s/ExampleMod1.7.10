@@ -154,6 +154,7 @@ shadowJar {
         from refMap
         manifest {
             attributes([
+                    "FMLAT"                      : accessTransformersFile.toString(),
                     "TweakClass"                 : "org.spongepowered.asm.launch.MixinTweaker",
                     "MixinConfigs"               : mixinConfigJson,
                     "FMLCorePluginContainsFMLMod": true,
@@ -172,6 +173,7 @@ jar {
         from refMap
         manifest {
             attributes([
+                    "FMLAT"                      : accessTransformersFile.toString(),
                     "TweakClass"                 : "org.spongepowered.asm.launch.MixinTweaker",
                     "MixinConfigs"               : mixinConfigJson,
                     "FMLCorePluginContainsFMLMod": true,
