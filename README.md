@@ -14,7 +14,7 @@ We had our fair share in struggles with build scripts for Minecraft Forge. There
 1. Fork this repository (you can keep the fork to simplify merging any build script updates in the future)
 2. Clone repository
 3. Replace placeholders (e.g. modid, author(s) name, etc.)
-4. Run `./gradlew setupDecompWorkspace`
+4. Run `./gradlew setupDecompWorkspace` (if build fails with `Could not find :forgeBin:1.7.10-10.13.4.1614-1.7.10.` this should fix it)
 5. Make sure to checkout the rest sections of this file.
 6. You are good to go! 
 
