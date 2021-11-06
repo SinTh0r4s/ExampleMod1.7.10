@@ -5,6 +5,19 @@
 
 An example mod for Minecraft 1.7.10 with Forge focussed on a stable, updatable setup.
 
+### Motivation
+
+We had our fair share in struggles with build scripts for Minecraft Forge. There are quite a few pitfalls from non-obvious error messages. This Example Project provides you a build system you can adapt to over 90% of Minecraft Forge mods and can easily be updated if need be.
+
+### Getting started
+
+1. Fork this repository (you can keep the fork to simplify merging any build script updates in the future)
+2. Clone repository
+3. Replace placeholders (e.g. modid, author(s) name, etc.)
+4. Run `./gradlew setupDecompWorkspace`
+5. Make sure to checkout the rest sections of this file.
+6. You are good to go! 
+
 ### Features
 
  - Updatable: Replace [`build.gradle`](https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/build.gradle) with a newer version
@@ -18,10 +31,6 @@ An example mod for Minecraft 1.7.10 with Forge focussed on a stable, updatable s
  - Git Tags integration for versioning
  - GitHub CI
  - [Jitpack](https://jitpack.io) CI
-
-### Motivation
-
-We had our fair share in struggles with build scripts for Minecraft Forge. There are quite a few pitfalls from non-obvious error messages. This Example Project provides you a build system you can adapt to over 90% of Minecraft Forge mods and can easily be updated if need be.
 
 ### Files
  - [`build.gradle`](https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/build.gradle): This is the core script of the build process. You should not need to tamper with it, unless you are trying to accomplish something out of the ordinary. __Do not touch this file! You will make a future update near impossible if you do so!__
