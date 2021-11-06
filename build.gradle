@@ -150,17 +150,25 @@ task generateAssets {
 }
 
 shadowJar {
+    def manifestAttributes = [:]
+    manifestAttributes += ["FMLCorePluginContainsFMLMod" : true]
+
+    if(accessTransformersFile.isEmpty() == false) {
+        manifestAttributes += ["FMLAT" : accessTransformersFile.toString()]
+    }
+
     if(usesMixins.toBoolean()) {
         from refMap
         manifest {
-            attributes([
-                    "FMLAT"                      : accessTransformersFile.toString(),
-                    "TweakClass"                 : "org.spongepowered.asm.launch.MixinTweaker",
-                    "MixinConfigs"               : mixinConfigJson,
-                    "FMLCorePluginContainsFMLMod": true,
-                    "ForceLoadAsMod"             : loadNormalModAfterApplingMixins.toBoolean()
-            ])
+            manifestAttributes += [
+                    "TweakClass" : "org.spongepowered.asm.launch.MixinTweaker",
+                    "MixinConfigs" : mixinConfigJson,
+                    "ForceLoadAsMod" : loadNormalModAfterApplingMixins.toBoolean()
+            ]
         }
+    }
+    manifest {
+        attributes(manifestAttributes)
     }
 
     minimize()
@@ -169,17 +177,25 @@ shadowJar {
 }
 
 jar {
+    def manifestAttributes = [:]
+    manifestAttributes += ["FMLCorePluginContainsFMLMod" : true]
+
+    if(accessTransformersFile.isEmpty() == false) {
+        manifestAttributes += ["FMLAT" : accessTransformersFile.toString()]
+    }
+
     if(usesMixins.toBoolean()) {
         from refMap
         manifest {
-            attributes([
-                    "FMLAT"                      : accessTransformersFile.toString(),
-                    "TweakClass"                 : "org.spongepowered.asm.launch.MixinTweaker",
-                    "MixinConfigs"               : mixinConfigJson,
-                    "FMLCorePluginContainsFMLMod": true,
-                    "ForceLoadAsMod"             : loadNormalModAfterApplingMixins.toBoolean()
-            ])
+            manifestAttributes += [
+                    "TweakClass" : "org.spongepowered.asm.launch.MixinTweaker",
+                    "MixinConfigs" : mixinConfigJson,
+                    "ForceLoadAsMod" : loadNormalModAfterApplingMixins.toBoolean()
+            ]
         }
+    }
+    manifest {
+        attributes(manifestAttributes)
     }
 
     if(usesShadowedDependencies.toBoolean()) {
