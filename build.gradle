@@ -155,8 +155,12 @@ shadowJar {
         manifestAttributes += ["FMLCorePluginContainsFMLMod": true]
     }
 
-    if(accessTransformersFile.isEmpty() == false) {
+    if(accessTransformersFile) {
         manifestAttributes += ["FMLAT" : accessTransformersFile.toString()]
+    }
+
+    if(coreModClass) {
+        manifestAttributes += ["FMLCorePlugin": modGroup + "." + coreModClass]
     }
 
     if(usesMixins.toBoolean()) {
@@ -184,8 +188,12 @@ jar {
         manifestAttributes += ["FMLCorePluginContainsFMLMod": true]
     }
 
-    if(accessTransformersFile.isEmpty() == false) {
+    if(accessTransformersFile) {
         manifestAttributes += ["FMLAT" : accessTransformersFile.toString()]
+    }
+
+    if(coreModClass) {
+        manifestAttributes += ["FMLCorePlugin": modGroup + "." + coreModClass]
     }
 
     if(usesMixins.toBoolean()) {
@@ -317,7 +325,7 @@ task apiJar(type: Jar) {
 artifacts {
     archives sourcesJar
     archives devJar
-    if(apiPackage.isEmpty() == false) {
+    if(apiPackage) {
         archives apiJar
     }
 }
