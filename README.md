@@ -51,7 +51,7 @@ Check out the [`example-access-transformers`](https://github.com/SinTh0r4s/Examp
 
 ### Mixins
 
-Mixins are usually used to modify vanilla or other mod/library from a mod level. For example, redirect a call, change visibility or make class implement your interface. It's an advanced topic and most mods don't need to do that.
+Mixins are usually used to modify vanilla or mod/library in runtime without having to change source code. For example, redirect a call, change visibility or make class implement your interface. It's an advanced topic and most mods don't need to do that.
 
 To activate Mixin in 'gradle.properties'. In that case a mixin configuration (usually named `mixins.mymodid.json`) will be generated automatically, and you only have to write the mixins itself. Dependencies are handled as well.
 Take a look at the examples in [`com.myname.mymodid.mixinplugin.*`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/example-mixins/src/main/java/com/myname/mymodid/mixinplugin) and [`com.myname.mymodid.mixins.*`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/example-mixins/src/main/java/com/myname/mymodid/mixins). 
