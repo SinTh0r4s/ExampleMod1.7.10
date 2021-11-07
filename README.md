@@ -11,12 +11,15 @@ We had our fair share in struggles with build scripts for Minecraft Forge. There
 
 ### Getting started
 
+Creating mod from scratch:
 1. Fork this repository (you can keep the fork to simplify merging any build script updates in the future)
 2. Clone repository
 3. Replace placeholders (edit values in gradle.properties, change example package and class names, etc.)
 4. Run `./gradlew setupDecompWorkspace` (if build fails with `Could not find :forgeBin:1.7.10-10.13.4.1614-1.7.10.` this should fix it)
 5. Make sure to checkout the rest sections of this file.
 6. You are good to go! 
+
+We also have described guidelines for existing mod [migration](docs/migration.md) and [porting](docs/porting.md)
 
 ### Features
 
@@ -40,23 +43,24 @@ We had our fair share in struggles with build scripts for Minecraft Forge. There
  - [`jitpack.yml`](https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/jitpack.yml): Ensures that your mod is available as import over [Jitpack](https://jitpack.io).
  - [`.github/workflows/gradle.yml`](https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/.github/workflows/gradle.yml): A simple CI script that will build your mod any time it is pushed to `master` or `main` and publish the result as release in your repository. This feature is free with GitHub if your repository is public.
 
-### Feedback wanted
-
-If you tried out this build script we would love to head your opinion! Is there any feature missing for you? Did something not work? Please open an issue and we will try to resolve it asap!
-
 ### Forge's Access Transformers
 
 You may activate Forge's Access Transformers by defining a configuration file in `gradle.properties`.
 
 Check out the [`example-access-transformers`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/example-access-transformers) brach for a working example!
 
-### For Advanced Modders: Mixins
+### Mixins
 
-You may activate Mixin in 'gradle.properties'. In that case a mixin configuration (usually named `mixins.mymodid.json`) will be generated automatically, and you only have to write the mixins itself. Dependencies are handled as well.
-Take a look at the examples in [`com.myname.mymodid.mixinplugin.*`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/example-mixins/src/main/java/com/myname/mymodid/mixinplugin) and [`com.myname.mymodid.mixins.*`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/example-mixins/src/main/java/com/myname/mymodid/mixins). The use of a MixinPlugin allows the injection into any mod and not just vanilla Minecraft.
+Mixins are usually used to modify vanilla or other mod/library from a mod level. For example, redirect a call, change visibility or make class implement your interface. It's an advanced topic and most mods don't need to do that.
+
+To activate Mixin in 'gradle.properties'. In that case a mixin configuration (usually named `mixins.mymodid.json`) will be generated automatically, and you only have to write the mixins itself. Dependencies are handled as well.
+Take a look at the examples in [`com.myname.mymodid.mixinplugin.*`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/example-mixins/src/main/java/com/myname/mymodid/mixinplugin) and [`com.myname.mymodid.mixins.*`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/example-mixins/src/main/java/com/myname/mymodid/mixins). 
 
 Check out the [`example-mixins`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/example-mixins) brach for a working example!
 
+### Feedback wanted
+
+If you tried out this build script we would love to head your opinion! Is there any feature missing for you? Did something not work? Please open an issue and we will try to resolve it asap!
 
 Happy modding, \
 [SinTh0r4s](https://github.com/SinTh0r4s), [TheElan](https://github.com/TheElan) and [basdxz](https://github.com/basdxz)
