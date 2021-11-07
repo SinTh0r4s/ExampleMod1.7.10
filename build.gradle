@@ -155,19 +155,21 @@ shadowJar {
         manifestAttributes += ["FMLCorePluginContainsFMLMod": true]
     }
 
-    if(accessTransformersFile.isEmpty() == false) {
+    if(accessTransformersFile) {
         manifestAttributes += ["FMLAT" : accessTransformersFile.toString()]
+    }
+
+    if(coreModClass) {
+        manifestAttributes += ["FMLCorePlugin": modGroup + "." + coreModClass]
     }
 
     if(usesMixins.toBoolean()) {
         from refMap
-        manifest {
-            manifestAttributes += [
-                    "TweakClass" : "org.spongepowered.asm.launch.MixinTweaker",
-                    "MixinConfigs" : mixinConfigJson,
-                    "ForceLoadAsMod" : containsMixinsAndOrCoreModOnly.toBoolean() == false
-            ]
-        }
+        manifestAttributes += [
+                "TweakClass" : "org.spongepowered.asm.launch.MixinTweaker",
+                "MixinConfigs" : mixinConfigJson,
+                "ForceLoadAsMod" : containsMixinsAndOrCoreModOnly.toBoolean() == false
+        ]
     }
     manifest {
         attributes(manifestAttributes)
@@ -184,19 +186,21 @@ jar {
         manifestAttributes += ["FMLCorePluginContainsFMLMod": true]
     }
 
-    if(accessTransformersFile.isEmpty() == false) {
+    if(accessTransformersFile) {
         manifestAttributes += ["FMLAT" : accessTransformersFile.toString()]
+    }
+
+    if(coreModClass) {
+        manifestAttributes += ["FMLCorePlugin": modGroup + "." + coreModClass]
     }
 
     if(usesMixins.toBoolean()) {
         from refMap
-        manifest {
-            manifestAttributes += [
-                    "TweakClass" : "org.spongepowered.asm.launch.MixinTweaker",
-                    "MixinConfigs" : mixinConfigJson,
-                    "ForceLoadAsMod" : containsMixinsAndOrCoreModOnly.toBoolean() == false
-            ]
-        }
+        manifestAttributes += [
+                "TweakClass" : "org.spongepowered.asm.launch.MixinTweaker",
+                "MixinConfigs" : mixinConfigJson,
+                "ForceLoadAsMod" : containsMixinsAndOrCoreModOnly.toBoolean() == false
+        ]
     }
     manifest {
         attributes(manifestAttributes)
@@ -288,13 +292,62 @@ processResources
 task sourcesJar(type: Jar) {
     from (sourceSets.main.allJava)
     from (file("$projectDir/LICENSE"))
-
     getArchiveClassifier().set('sources')
+
+    def manifestAttributes = [:]
+    if(containsMixinsAndOrCoreModOnly.toBoolean() == false) {
+        manifestAttributes += ["FMLCorePluginContainsFMLMod": true]
+    }
+
+    if(accessTransformersFile) {
+        manifestAttributes += ["FMLAT" : accessTransformersFile.toString()]
+    }
+
+    if(coreModClass) {
+        manifestAttributes += ["FMLCorePlugin": modGroup + "." + coreModClass]
+    }
+
+    if(usesMixins.toBoolean()) {
+        from refMap
+        manifestAttributes += [
+                "TweakClass" : "org.spongepowered.asm.launch.MixinTweaker",
+                "MixinConfigs" : mixinConfigJson,
+                "ForceLoadAsMod" : containsMixinsAndOrCoreModOnly.toBoolean() == false
+        ]
+    }
+    manifest {
+        attributes(manifestAttributes)
+    }
 }
 
 task devJar(type: Jar) {
     from sourceSets.main.output
-    archiveClassifier.set("dev")
+    getArchiveClassifier().set("dev")
+
+    def manifestAttributes = [:]
+    if(containsMixinsAndOrCoreModOnly.toBoolean() == false) {
+        manifestAttributes += ["FMLCorePluginContainsFMLMod": true]
+    }
+
+    if(accessTransformersFile) {
+        manifestAttributes += ["FMLAT" : accessTransformersFile.toString()]
+    }
+
+    if(coreModClass) {
+        manifestAttributes += ["FMLCorePlugin": modGroup + "." + coreModClass]
+    }
+
+    if(usesMixins.toBoolean()) {
+        from refMap
+        manifestAttributes += [
+                "TweakClass" : "org.spongepowered.asm.launch.MixinTweaker",
+                "MixinConfigs" : mixinConfigJson,
+                "ForceLoadAsMod" : containsMixinsAndOrCoreModOnly.toBoolean() == false
+        ]
+    }
+    manifest {
+        attributes(manifestAttributes)
+    }
 }
 
 task apiJar(type: Jar) {
@@ -317,7 +370,7 @@ task apiJar(type: Jar) {
 artifacts {
     archives sourcesJar
     archives devJar
-    if(apiPackage.isEmpty() == false) {
+    if(apiPackage) {
         archives apiJar
     }
 }
