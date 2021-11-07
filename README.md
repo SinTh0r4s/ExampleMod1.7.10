@@ -44,10 +44,19 @@ We had our fair share in struggles with build scripts for Minecraft Forge. There
 
 If you tried out this build script we would love to head your opinion! Is there any feature missing for you? Did something not work? Please open an issue and we will try to resolve it asap!
 
+### Forge's Access Transformers
+
+You may activate Forge's Access Transformers by defining a configuration file in `gradle.properties`.
+
+Check out the [`example-access-transformers`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/example-access-transformers) brach for a working example!
+
 ### For Advanced Modders: Mixins
 
 You may activate Mixin in 'gradle.properties'. In that case a mixin configuration (usually named `mixins.mymodid.json`) will be generated automatically, and you only have to write the mixins itself. Dependencies are handled as well.
-Take a look at the examples in [`com.myname.mymodid.mixinplugin.MixinPlugin`](https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/src/main/java/com/myname/mymodid/mixinplugin/MixinPlugin.java) and [`com.myname.mymodid.mixins.*`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/main/src/main/java/com/myname/mymodid/mixins). The use of a MixinPlugin allows the injection into any mod and not just vanilla Minecraft.
+Take a look at the examples in [`com.myname.mymodid.mixinplugin.*`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/example-mixins/src/main/java/com/myname/mymodid/mixinplugin) and [`com.myname.mymodid.mixins.*`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/example-mixins/src/main/java/com/myname/mymodid/mixins). The use of a MixinPlugin allows the injection into any mod and not just vanilla Minecraft.
+
+Check out the [`example-mixins`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/example-mixins) brach for a working example!
+
 
 Happy modding, \
 [SinTh0r4s](https://github.com/SinTh0r4s), [TheElan](https://github.com/TheElan) and [basdxz](https://github.com/basdxz)
