@@ -151,7 +151,9 @@ task generateAssets {
 
 shadowJar {
     def manifestAttributes = [:]
-    manifestAttributes += ["FMLCorePluginContainsFMLMod" : true]
+    if(containsMixinsAndOrCoreModOnly.toBoolean() == false) {
+        manifestAttributes += ["FMLCorePluginContainsFMLMod": true]
+    }
 
     if(accessTransformersFile.isEmpty() == false) {
         manifestAttributes += ["FMLAT" : accessTransformersFile.toString()]
@@ -163,7 +165,7 @@ shadowJar {
             manifestAttributes += [
                     "TweakClass" : "org.spongepowered.asm.launch.MixinTweaker",
                     "MixinConfigs" : mixinConfigJson,
-                    "ForceLoadAsMod" : loadNormalModAfterApplingMixins.toBoolean()
+                    "ForceLoadAsMod" : containsMixinsAndOrCoreModOnly.toBoolean() == false
             ]
         }
     }
@@ -178,7 +180,9 @@ shadowJar {
 
 jar {
     def manifestAttributes = [:]
-    manifestAttributes += ["FMLCorePluginContainsFMLMod" : true]
+    if(containsMixinsAndOrCoreModOnly.toBoolean() == false) {
+        manifestAttributes += ["FMLCorePluginContainsFMLMod": true]
+    }
 
     if(accessTransformersFile.isEmpty() == false) {
         manifestAttributes += ["FMLAT" : accessTransformersFile.toString()]
@@ -190,7 +194,7 @@ jar {
             manifestAttributes += [
                     "TweakClass" : "org.spongepowered.asm.launch.MixinTweaker",
                     "MixinConfigs" : mixinConfigJson,
-                    "ForceLoadAsMod" : loadNormalModAfterApplingMixins.toBoolean()
+                    "ForceLoadAsMod" : containsMixinsAndOrCoreModOnly.toBoolean() == false
             ]
         }
     }
