@@ -1,6 +1,9 @@
 package com.myname.mymodid;
 
 import cpw.mods.fml.common.event.*;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.gui.GuiScreenBook;
+import net.minecraft.init.Blocks;
 
 public class CommonProxy {
 
@@ -15,7 +18,14 @@ public class CommonProxy {
 
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes."
     public void init(FMLInitializationEvent event) {
+        // Access originally package-private subclass
+        GuiScreenBook.NextPageButton button = null;
 
+        // Access originally private field
+        Material air = Blocks.air.blockMaterial;
+
+        // Access originally protected method
+        Blocks.air.disableStats();
     }
 
     // postInit "Handle interaction with other mods, complete your setup based on this."
