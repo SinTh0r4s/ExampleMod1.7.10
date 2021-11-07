@@ -230,16 +230,36 @@ afterEvaluate {
 }
 
 runClient {
-    args    "--mods=../build/libs/$modId-${version}.jar",
-            usesMixins.toBoolean() ? "--tweakClass org.spongepowered.asm.launch.MixinTweaker" : "",
-            developmentEnvironmentUserName.isEmpty() == false ? "--username": "",
-            developmentEnvironmentUserName.isEmpty() == false ? developmentEnvironmentUserName : ""
+    def arguments = []
+
+    if(usesMixins.toBoolean()) {
+        arguments += [
+                "--mods=../build/libs/$modId-${version}.jar",
+                "--tweakClass org.spongepowered.asm.launch.MixinTweaker"
+        ]
+    }
+
+    if(developmentEnvironmentUserName) {
+        arguments += [
+                "--username",
+                developmentEnvironmentUserName
+        ]
+    }
+
+    args(arguments)
 }
 
 runServer {
-    args    "--mods=../build/libs/$modId-${version}.jar",
-            usesMixins.toBoolean() ? "--tweakClass org.spongepowered.asm.launch.MixinTweaker" : ""
+    def arguments = []
 
+    if(usesMixins.toBoolean()) {
+        arguments += [
+                "--mods=../build/libs/$modId-${version}.jar",
+                "--tweakClass org.spongepowered.asm.launch.MixinTweaker"
+        ]
+    }
+
+    args(arguments)
 }
 
 processResources
