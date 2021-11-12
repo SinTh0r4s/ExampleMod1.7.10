@@ -12,17 +12,46 @@ jobs:
   buildscript-maintenece:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
 
-      - name: ensure build script version is updated
+      - name: Ensure build script version is updated
         run: .github/scripts/update-version.sh
 
   zip-packages:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      - uses: montudor/action-zip@v1
+      - name: Zip starter
+        uses: montudor/action-zip@v1
+        with:
+          args: >
+            zip -r starter.zip . \
+                \
+                -x "*.git/*" \
+                \
+                -x ".github/scripts/update-version.sh" \
+                -x ".github/workflows/repository-specific.yml" \
+                \
+                -x "*docs/*" \
+                -x "LICENSE" \
+                -x "README.md"
+
+      - name: Publish starter package
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest-starer"
+          prerelease: true
+          title: "Latest starter package"
+          files: "starter.zip"
+
+      - name: Zip migration
+        uses: montudor/action-zip@v1
         with:
           args: >
             zip -r migration.zip . \
@@ -37,24 +66,11 @@ jobs:
                 -x "LICENSE" \
                 -x "README.md"
 
-      - uses: montudor/action-zip@v1
-        with:
-          args: >
-            zip -r starter.zip . \
-                \
-                -x "*.git/*" \
-                \
-                -x ".github/scripts/update-version.sh" \
-                -x ".github/workflows/repository-specific.yml" \
-                \
-                -x "*docs/*" \
-                -x "LICENSE" \
-                -x "README.md"
-
-      - uses: "marvinpinto/action-automatic-releases@latest"
+      - name: Publish migration package
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest-packages"
+          automatic_release_tag: "latest-starer"
           prerelease: true
-          title: "Latest starter and migration packages"
-          files: "*.zip"
+          title: "Latest migration package"
+          files: "migration.zip"
