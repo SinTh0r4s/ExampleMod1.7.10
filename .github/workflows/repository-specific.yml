@@ -1,0 +1,54 @@
+# This workflow only meant for the source mod youy shouldn't bring it into your own project
+
+name: Buildscript update CI
+
+on:
+  push:
+    branches: [ master, main, buildscript-versioning-and-migration-zip ] # todo: remove temporary test branch from here
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  buildscript-maintenece:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ensure build script version is updated
+        run: ./.github/scripts/update-version.sh
+
+  zip-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Zip migration
+        run: >
+          zip -r migration.zip . \
+              \
+              -x "*.git/*" \
+              \
+              -x ".github/scripts/update-version.sh" \
+              -x ".github/workflows/repository-specific.yml" \
+              \
+              -x "*docs/*" \
+              -x "*src/*" \
+              -x "LICENSE" \
+              -x "README.md"
+
+      - name: Zip starter
+        run: >
+          zip -r starter.zip . \
+              \
+              -x "*.git/*" \
+              \
+              -x ".github/scripts/update-version.sh" \
+              -x ".github/workflows/repository-specific.yml" \
+              \
+              -x "*docs/*" \
+              -x "LICENSE" \
+              -x "README.md"
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest-packages"
+          prerelease: true
+          title: "Latest starter and migration packages"
+          files: "*.zip"
