@@ -51,6 +51,18 @@ if(JavaVersion.current() != JavaVersion.VERSION_1_8) {
     throw new GradleException("This project requires Java 8, but it's running on " + JavaVersion.current())
 }
 
+def checkForUpdate() {
+    Thread.start {
+        Map parameters = [ "connectTimeout" : 2000, "readTimeout": 2000 ]
+        String currentBuildScript = new File("build.gradle").getText()
+        String availableBuildScript = new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle").newInputStream(parameters).getText()
+        if (availableBuildScript.equals("") == false && currentBuildScript.equals(availableBuildScript) == false) {
+            println("Build script update available! Check https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/build.gradle");
+        }
+    }
+}
+checkForUpdate()
+
 def checkPropertyExsists(String propertyName) {
     if (project.hasProperty(propertyName) == false) {
         throw new GradleException("This project requires a property \"" + propertyName + "\"! Please add it your \"gradle.properties\". You can find all properties and their description here: https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/gradle.properties")
