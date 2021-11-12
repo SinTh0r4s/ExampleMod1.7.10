@@ -9,13 +9,13 @@ on:
     branches: [ master, main ]
 
 jobs:
-  buildscript-maintenece:
+  buildscript-maintenance:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          fetch-depth: 1
+          fetch-depth: 2
 
       - name: Ensure build script version is updated
         run: .github/scripts/update-version.sh
