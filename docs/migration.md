@@ -5,7 +5,7 @@ Migration for the typical mod which doesn't use anything special but Minecraft f
 For core plugin, Mixins, shadowing, access transformers, ASM or etc. you'll need to do some extra steps.
 If they are missing in this document - we will gladly receive your suggestions/contribution.
 
-1. Copy and replace all files from [template](TODO: insert the latest migration.zip link) to your repository, but:
+1. Copy and replace all files from [template](https://github.com/SinTh0r4s/ExampleMod1.7.10/releases/download/latest-migration/migration.zip) to your repository, but:
    1. `build.gradle`
    2. `src`
    3. `LICENSE`

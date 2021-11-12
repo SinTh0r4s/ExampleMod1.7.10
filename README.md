@@ -12,8 +12,8 @@ We had our fair share in struggles with build scripts for Minecraft Forge. There
 ### Getting started
 
 Creating mod from scratch:
-1. Unzip [project starter](TODO: insert the latest starter.zip link)
-2. Commit it to your VCS of choice for later reference (e.g. in root directory `git init; git commit -m "initialise repository"`)
+1. Unzip [project starter](https://github.com/SinTh0r4s/ExampleMod1.7.10/releases/download/latest-starer/starter.zip) into project directory.
+2. Ensure your project is under VCS. For example initialise git repository by running `git init; git commit --message "initialized repository"`.
 3. Replace placeholders (edit values in gradle.properties, change example package and class names, etc.)
 4. Run `./gradlew setupDecompWorkspace` (if build fails with `Could not find :forgeBin:1.7.10-10.13.4.1614-1.7.10.` this should fix it)
 5. Make sure to check out the rest sections of this file.
