@@ -1,5 +1,5 @@
-echo "Currently only ${GITHUB_REF_NAME}"
-git checkout $GITHUB_REF_NAME
+echo "Currently on ${GITHUB_REF##*/}"
+git checkout ${GITHUB_REF##*/}
 if [ ! -z $(git diff --name-only HEAD HEAD~1 | grep build.gradle) ]; then
   new_version="$(git log -n1 --format=format:"%H")"
   sed --in-place "s!//version:.*!//version: $new_version!g" build.gradle
