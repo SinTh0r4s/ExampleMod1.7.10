@@ -53,7 +53,7 @@ You may activate Forge's Access Transformers by defining a configuration file in
 
 Check out the [`example-access-transformers`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/example-access-transformers) brach for a working example!
 
-__Warning:__ Access Transformers are bugged and will deny you any sources for the decompiled minecraft! Your development environment will still work, you might face some inconveniences. For example, IntelliJ will not permit searches in dependencies without attached sources.
+__Warning:__ Access Transformers are bugged and will deny you any sources for the decompiled minecraft! Your development environment will still work, but you might face some inconveniences. For example, IntelliJ will not permit searches in dependencies without attached sources.
 
 ### Mixins
 
