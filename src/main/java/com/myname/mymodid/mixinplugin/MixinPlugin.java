@@ -64,7 +64,7 @@ public class MixinPlugin implements IMixinConfigPlugin {
 
         List<String> mixins = new ArrayList<>();
         for (Mixin mixin : Mixin.values()) {
-            if (loadedMods.containsAll(mixin.targetedMods)) {
+            if (mixin.shouldLoad(loadedMods)) {
                 mixins.add(mixin.mixinClass);
                 LOG.debug("Loading mixin: " + mixin.mixinClass);
             }
