@@ -1,10 +1,10 @@
 # This workflow only meant for the source mod you shouldn't bring it into your own project
 
-name: Buildscript update CI
+name: Repository specific CI
 
 on:
   push:
-    branches: [ master, main, buildscript-versioning-and-migration-zip ] # todo: remove temporary test branch from here
+    branches: [ master, main ]
   pull_request:
     branches: [ master, main ]
 
@@ -17,7 +17,7 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Ensure build script version is updated
+      - name: Ensure build script version is up to date
         run: .github/scripts/update-version.sh
 
   zip-packages:
@@ -39,7 +39,10 @@ jobs:
                 \
                 -x "*docs/*" \
                 -x "LICENSE" \
-                -x "README.md"
+                -x "README.md" \
+                \
+                -x "starter.zip" \
+                -x "migration.zip"
 
       - name: Publish starter package
         uses: "marvinpinto/action-automatic-releases@latest"
@@ -64,7 +67,10 @@ jobs:
                 -x "*docs/*" \
                 -x "*src/*" \
                 -x "LICENSE" \
-                -x "README.md"
+                -x "README.md" \
+                \
+                -x "starter.zip" \
+                -x "migration.zip"
 
       - name: Publish migration package
         uses: "marvinpinto/action-automatic-releases@latest"
