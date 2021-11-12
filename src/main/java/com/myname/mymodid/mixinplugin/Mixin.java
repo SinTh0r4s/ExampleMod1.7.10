@@ -18,7 +18,7 @@ public enum Mixin {
     // Replace with your own mixins:
     ItemEditableBookMixin("minecraft.ItemEditableBookMixin", Side.BOTH, VANILLA),
     // You may also require multiple mods to be loaded if your mixin requires both
-    GT_Block_Ores_AbstractMixin("gregtech.GT_Block_Ores_AbstractMixin", Side.BOTH, GREGTECH, VANILLA);
+    GT_Block_Ores_AbstractMixin("gregtech.GT_Block_Ores_AbstractMixin", GREGTECH, VANILLA);
 
     public final String mixinClass;
     public final List<TargetedMod> targetedMods;
@@ -28,6 +28,12 @@ public enum Mixin {
         this.mixinClass = mixinClass;
         this.targetedMods = Arrays.asList(targetedMods);
         this.side = side;
+    }
+
+    Mixin(String mixinClass, TargetedMod... targetedMods) {
+        this.mixinClass = mixinClass;
+        this.targetedMods = Arrays.asList(targetedMods);
+        this.side = Side.BOTH;
     }
 
     public boolean shouldLoad(List<TargetedMod> loadedMods) {
