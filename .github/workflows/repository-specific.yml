@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ensure build script version is updated
-        run: ./.github/scripts/update-version.sh
+        run: .github/scripts/update-version.sh
 
   zip-packages:
     runs-on: ubuntu-latest
