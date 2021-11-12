@@ -58,6 +58,10 @@ Take a look at the examples in [`com.myname.mymodid.mixinplugin.*`](https://gith
 
 Check out the [`example-mixins`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/example-mixins) brach for a working example!
 
+### Advanced
+
+If your project requires custom gradle commands you may add a `addon.gradle` to your project. It will be added automatically to the build script. Although we recommend against it, it is sometimes required. When in doubt, feel free to ask us about it. You may break future updates of this build system!
+
 ### Feedback wanted
 
 If you tried out this build script we would love to head your opinion! Is there any feature missing for you? Did something not work? Please open an issue and we will try to resolve it asap!

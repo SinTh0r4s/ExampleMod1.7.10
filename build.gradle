@@ -86,6 +86,10 @@ minecraft {
     }
 }
 
+if(file("addon.gradle").exists()) {
+    apply from: "addon.gradle"
+}
+
 apply from: 'repositories.gradle'
 
 configurations {
