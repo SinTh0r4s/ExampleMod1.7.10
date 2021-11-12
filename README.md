@@ -9,6 +9,10 @@ An example mod for Minecraft 1.7.10 with Forge focussed on a stable, updatable s
 
 We had our fair share in struggles with build scripts for Minecraft Forge. There are quite a few pitfalls from non-obvious error messages. This Example Project provides you a build system you can adapt to over 90% of Minecraft Forge mods and can easily be updated if need be.
 
+### Help! I'm stuck!
+
+We all have been there! Check out our [FAQ](https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/FAQ.md). If that doesn't help, please open an issue.
+
 ### Getting started
 
 Creating mod from scratch:
@@ -48,6 +52,8 @@ We also have described guidelines for existing mod [migration](docs/migration.md
 You may activate Forge's Access Transformers by defining a configuration file in `gradle.properties`.
 
 Check out the [`example-access-transformers`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/example-access-transformers) brach for a working example!
+
+__Warning:__ Access Transformers are bugged and will deny you any sources for the decompiled minecraft! Your development environment will still work, you might face some inconveniences. For example, IntelliJ will not permit searches in dependencies without attached sources.
 
 ### Mixins
 
