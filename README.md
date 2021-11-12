@@ -11,7 +11,7 @@ We had our fair share in struggles with build scripts for Minecraft Forge. There
 
 ### Help! I'm stuck!
 
-We all have been there! Check out our [FAQ](https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/FAQ.md). If that doesn't help, please open an issue.
+We all have been there! Check out our [FAQ](https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/docs/FAQ.md). If that doesn't help, please open an issue.
 
 ### Getting started
 
