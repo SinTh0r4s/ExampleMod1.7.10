@@ -5,15 +5,10 @@ Migration for the typical mod which doesn't use anything special but Minecraft f
 For core plugin, Mixins, shadowing, access transformers, ASM or etc. you'll need to do some extra steps.
 If they are missing in this document - we will gladly receive your suggestions/contribution.
 
-1. Copy and replace all files from [template](https://github.com/SinTh0r4s/ExampleMod1.7.10/releases/download/latest-migration/migration.zip) to your repository, but:
-   1. `build.gradle`
-   2. `src`
-   3. `LICENSE`
-   4. `README.md`
-   5. `build.gradle(.kts)`
+1. Copy and replace all files from [template](https://github.com/SinTh0r4s/ExampleMod1.7.10/releases/download/latest-migration/migration.zip) to your repository, but `build.gradle`
 2. Copy all repositories from your `build.gradle(.kts)` to `repositories.gradle`
 3. Copy all dependencies from your `build.gradle(.kts)` to `dependecies.gradle`
-4. replace your `build.gradle(.kts)` with `build.gradle` from template. In case you have written some custom tasks/configurations not present in the template - you'll best to move them to separate file and link it in this, like for example it does this with `dependencies.gradle`
+4. replace your `build.gradle(.kts)` with `build.gradle` from template. In case you have written some custom tasks/configurations not present in the template - move them to separate file and link it in this, like for example it does this with `dependencies.gradle`
 5. Adapt `gradle.properties` to your mod
 6. Ensure `src/main/resources/mcmod.info` contains `${modId}`, `${modName}`. `${modVersion}` and `${minecraftVersion}`
 7. Re-import the project to your IDE (e.g. restart with clean caches in IntelliJ IDEA)
