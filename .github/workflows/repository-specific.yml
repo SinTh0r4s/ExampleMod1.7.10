@@ -1,4 +1,4 @@
-# This workflow only meant for the source mod youy shouldn't bring it into your own project
+# This workflow only meant for the source mod you shouldn't bring it into your own project
 
 name: Buildscript update CI
 
@@ -12,38 +12,44 @@ jobs:
   buildscript-maintenece:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+
       - name: ensure build script version is updated
         run: .github/scripts/update-version.sh
 
   zip-packages:
     runs-on: ubuntu-latest
     steps:
-      - name: Zip migration
-        run: >
-          zip -r migration.zip . \
-              \
-              -x "*.git/*" \
-              \
-              -x ".github/scripts/update-version.sh" \
-              -x ".github/workflows/repository-specific.yml" \
-              \
-              -x "*docs/*" \
-              -x "*src/*" \
-              -x "LICENSE" \
-              -x "README.md"
+      - uses: actions/checkout@v2
 
-      - name: Zip starter
-        run: >
-          zip -r starter.zip . \
-              \
-              -x "*.git/*" \
-              \
-              -x ".github/scripts/update-version.sh" \
-              -x ".github/workflows/repository-specific.yml" \
-              \
-              -x "*docs/*" \
-              -x "LICENSE" \
-              -x "README.md"
+      - uses: montudor/action-zip@v1
+        with:
+          args: >
+            zip -r migration.zip . \
+                \
+                -x "*.git/*" \
+                \
+                -x ".github/scripts/update-version.sh" \
+                -x ".github/workflows/repository-specific.yml" \
+                \
+                -x "*docs/*" \
+                -x "*src/*" \
+                -x "LICENSE" \
+                -x "README.md"
+
+      - uses: montudor/action-zip@v1
+        with:
+          args: >
+            zip -r starter.zip . \
+                \
+                -x "*.git/*" \
+                \
+                -x ".github/scripts/update-version.sh" \
+                -x ".github/workflows/repository-specific.yml" \
+                \
+                -x "*docs/*" \
+                -x "LICENSE" \
+                -x "README.md"
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
