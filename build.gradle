@@ -47,6 +47,91 @@ idea {
     }
 }
 
+
+if(JavaVersion.current() != JavaVersion.VERSION_1_8) {
+    throw new GradleException("This project requires Java 8, but it's running on " + JavaVersion.current())
+}
+
+def checkForUpdate() {
+    Thread.start {
+        Map parameters = [ "connectTimeout" : 2000, "readTimeout": 2000 ]
+        String currentBuildScript = new File("build.gradle").getText()
+        String availableBuildScript = new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle").newInputStream(parameters).getText()
+        if (availableBuildScript.equals("") == false && currentBuildScript.equals(availableBuildScript) == false) {
+            println("Build script update available! Check https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/build.gradle");
+        }
+    }
+}
+checkForUpdate()
+
+def checkPropertyExsists(String propertyName) {
+    if (project.hasProperty(propertyName) == false) {
+        throw new GradleException("This project requires a property \"" + propertyName + "\"! Please add it your \"gradle.properties\". You can find all properties and their description here: https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/gradle.properties")
+    }
+}
+
+checkPropertyExsists("modName")
+checkPropertyExsists("modId")
+checkPropertyExsists("modGroup")
+checkPropertyExsists("minecraftVersion")
+checkPropertyExsists("forgeVersion")
+checkPropertyExsists("replaceGradleTokenInFile")
+checkPropertyExsists("gradleTokenModId")
+checkPropertyExsists("gradleTokenModName")
+checkPropertyExsists("gradleTokenVersion")
+checkPropertyExsists("gradleTokenGroupName")
+checkPropertyExsists("apiPackage")
+checkPropertyExsists("accessTransformersFile")
+checkPropertyExsists("usesMixins")
+checkPropertyExsists("mixinPlugin")
+checkPropertyExsists("mixinsPackage")
+checkPropertyExsists("coreModClass")
+checkPropertyExsists("containsMixinsAndOrCoreModOnly")
+checkPropertyExsists("usesShadowedDependencies")
+checkPropertyExsists("developmentEnvironmentUserName")
+
+String targetPackage = "src/main/java/" + modGroup.toString().replaceAll("\\.", "/")
+if(new File(targetPackage).exists() == false) {
+    throw new GradleException("Could not resolve \"modGroup\"! Could not find " + targetPackage)
+}
+
+if(apiPackage) {
+    targetPackage = "src/main/java/" + modGroup.toString().replaceAll("\\.", "/") + "/" + apiPackage.toString().replaceAll("\\.", "/")
+    if(new File(targetPackage).exists() == false) {
+        throw new GradleException("Could not resolve \"apiPackage\"! Could not find " + targetPackage)
+    }
+}
+
+if(accessTransformersFile) {
+    targetPackage = "src/main/resources/META-INF/" + accessTransformersFile
+    if(new File(targetPackage).exists() == false) {
+        throw new GradleException("Could not resolve \"accessTransformersFile\"! Could not find " + targetPackage)
+    }
+}
+
+if(usesMixins.toBoolean()) {
+    if(mixinsPackage.isEmpty() || mixinPlugin.isEmpty()) {
+        throw new GradleException("\"mixinPlugin\" requires \"mixinsPackage\" and \"mixinPlugin\" to be set!")
+    }
+
+    targetPackage = "src/main/java/" + modGroup.toString().replaceAll("\\.", "/") + "/" + mixinsPackage.toString().replaceAll("\\.", "/")
+    if(new File(targetPackage).exists() == false) {
+        throw new GradleException("Could not resolve \"mixinsPackage\"! Could not find " + targetPackage)
+    }
+
+    String targetFile = "src/main/java/" + modGroup.toString().replaceAll("\\.", "/") + "/" + mixinPlugin.toString().replaceAll("\\.", "/") + ".java"
+    if(new File(targetFile).exists() == false) {
+        throw new GradleException("Could not resolve \"mixinPlugin\"! Could not find " + targetFile)
+    }
+}
+
+if(coreModClass) {
+    String targetFile = "src/main/java/" + modGroup.toString().replaceAll("\\.", "/") + "/" + coreModClass.toString().replaceAll("\\.", "/") + ".java"
+    if(new File(targetFile).exists() == false) {
+        throw new GradleException("Could not resolve \"coreModClass\"! Could not find " + targetFile)
+    }
+}
+
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
 
@@ -55,16 +140,14 @@ configurations.all {
     System.setProperty("org.gradle.internal.http.socketTimeout", 120000 as String)
 }
 
+// Fix Jenkins' Git: chmod a file should not be detected as a change and append a '.dirty' to the version
+'git config core.fileMode false'.execute()
 // Pulls version from git tag
 version = minecraftVersion + "-" + gitVersion()
 group = modGroup
 archivesBaseName = modId
 
 minecraft {
-    if(JavaVersion.current() != JavaVersion.VERSION_1_8) {
-        throw new GradleException("This project requires Java 8, but it's running on " + JavaVersion.current())
-    }
-
     version = minecraftVersion + "-" + forgeVersion + "-" + minecraftVersion
     runDir = "run"
 
@@ -83,6 +166,10 @@ minecraft {
             replace gradleTokenGroupName, modGroup
         }
     }
+}
+
+if(file("addon.gradle").exists()) {
+    apply from: "addon.gradle"
 }
 
 apply from: 'repositories.gradle'

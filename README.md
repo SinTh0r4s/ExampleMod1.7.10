@@ -9,6 +9,10 @@ An example mod for Minecraft 1.7.10 with Forge focussed on a stable, updatable s
 
 We had our fair share in struggles with build scripts for Minecraft Forge. There are quite a few pitfalls from non-obvious error messages. This Example Project provides you a build system you can adapt to over 90% of Minecraft Forge mods and can easily be updated if need be.
 
+### Help! I'm stuck!
+
+We all have been there! Check out our [FAQ](https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/docs/FAQ.md). If that doesn't help, please open an issue.
+
 ### Getting started
 
 Creating mod from scratch:
@@ -50,6 +54,8 @@ You may activate Forge's Access Transformers by defining a configuration file in
 
 Check out the [`example-access-transformers`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/example-access-transformers) brach for a working example!
 
+__Warning:__ Access Transformers are bugged and will deny you any sources for the decompiled minecraft! Your development environment will still work, but you might face some inconveniences. For example, IntelliJ will not permit searches in dependencies without attached sources.
+
 ### Mixins
 
 Mixins are usually used to modify vanilla or mod/library in runtime without having to change source code. For example, redirect a call, change visibility or make class implement your interface. It's an advanced topic and most mods don't need to do that.
@@ -58,6 +64,10 @@ You can activate Mixin in 'gradle.properties'. In that case a mixin configuratio
 Take a look at the examples in [`com.myname.mymodid.mixinplugin.*`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/example-mixins/src/main/java/com/myname/mymodid/mixinplugin) and [`com.myname.mymodid.mixins.*`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/example-mixins/src/main/java/com/myname/mymodid/mixins). 
 
 Check out the [`example-mixins`](https://github.com/SinTh0r4s/ExampleMod1.7.10/tree/example-mixins) brach for a working example!
+
+### Advanced
+
+If your project requires custom gradle commands you may add a `addon.gradle` to your project. It will be added automatically to the build script. Although we recommend against it, it is sometimes required. When in doubt, feel free to ask us about it. You may break future updates of this build system!
 
 ### Feedback wanted
 
