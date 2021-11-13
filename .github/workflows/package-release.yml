@@ -26,7 +26,6 @@ jobs:
                 -x ".github/workflows/package-release.yml" \
                 \
                 -x "*docs/*" \
-                -x "LICENSE" \
                 -x "README.md" \
                 \
                 -x "starter.zip" \
