@@ -1,4 +1,4 @@
-//version: edb7416b756cc57c99d5c53f0dd3b9477b764628
+//version: b61969b80aa3f0b5eab40e92bf943011395d0114
 /*
 DO NOT CHANGE THIS FILE!
 
@@ -54,7 +54,7 @@ if(JavaVersion.current() != JavaVersion.VERSION_1_8) {
 
 String getVersionHash(String buildScriptContent) {
     String[] lines = buildScriptContent.split("\n")
-    if(lines.size() > 0 && lines[0].startsWith("//version: ")) {
+    if(lines.size() > 0 && lines[0].startsWith("//version: b61969b80aa3f0b5eab40e92bf943011395d0114
        return lines[0].substring(11)
     }
     return ""
