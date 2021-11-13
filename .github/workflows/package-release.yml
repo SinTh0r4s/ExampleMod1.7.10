@@ -27,6 +27,7 @@ jobs:
                 \
                 -x "*docs/*" \
                 -x "README.md" \
+                -x "LICENSE" \
                 \
                 -x "starter.zip" \
                 -x "migration.zip"
