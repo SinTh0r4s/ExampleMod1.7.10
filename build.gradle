@@ -1,4 +1,4 @@
-//version: b61969b80aa3f0b5eab40e92bf943011395d0114
+//version: b61969b80aa3f0b5eab40e92bf943011395d0114ssssss
 /*
 DO NOT CHANGE THIS FILE!
 
@@ -52,10 +52,10 @@ if(JavaVersion.current() != JavaVersion.VERSION_1_8) {
     throw new GradleException("This project requires Java 8, but it's running on " + JavaVersion.current())
 }
 
-String getVersionHash(String buildScriptContent) {
-    String[] lines = buildScriptContent.split("\n")
-    if(lines.size() > 0 && lines[0].startsWith("//version: b61969b80aa3f0b5eab40e92bf943011395d0114
-       return lines[0].substring(11)
+static String getVersionHash(String buildScriptContent) {
+    String versionLine = buildScriptContent.find("^//version: [a-z0-9]*")
+    if(versionLine != null) {
+        return versionLine.split(": ").last()
     }
     return ""
 }
