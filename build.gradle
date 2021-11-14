@@ -8,6 +8,7 @@ Please check https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/build.gradl
 
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
+
 import java.util.concurrent.TimeUnit
 
 buildscript {
@@ -60,17 +61,19 @@ static String getVersionHash(String buildScriptContent) {
     return ""
 }
 
-def checkForUpdate() {
+static def checkForUpdate() {
     Thread.start {
-        Map parameters = [ "connectTimeout" : 2000, "readTimeout": 2000 ]
+        Map parameters = ["connectTimeout": 2000, "readTimeout": 2000]
+        
         String currentBuildScript = new File("build.gradle").getText()
         String currentBuildScriptHash = getVersionHash(currentBuildScript)
+        
         String availableBuildScript = new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle").newInputStream(parameters).getText()
         String availableBuildScriptHash = getVersionHash(availableBuildScript)
-        if (currentBuildScriptHash.equals("") == false && availableBuildScriptHash.equals("") == false
-                && currentBuildScriptHash.equals(availableBuildScriptHash) == false) {
-            println("Build script update available! Check https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/build.gradle");
-        }
+        
+        if (currentBuildScriptHash.empty || availableBuildScriptHash.empty || currentBuildScriptHash == availableBuildScriptHash) return
+
+        println("Build script update available! Check https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/build.gradle")
     }
 }
 checkForUpdate()
