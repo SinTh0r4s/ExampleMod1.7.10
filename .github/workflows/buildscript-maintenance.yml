@@ -2,7 +2,9 @@
 
 name: Buildscript maintenance
 
-on: [push]
+on:
+  push:
+    branches: [ master, main ]
 
 jobs:
   buildscript-maintenance:
