@@ -483,10 +483,8 @@ static boolean isNewBuildScriptVersionAvailable() {
 
     String currentBuildScript = new File("build.gradle").getText()
     String currentBuildScriptHash = getVersionHash(currentBuildScript)
-    println "current: $currentBuildScriptHash"
     String availableBuildScript = availableBuildScriptUrl().newInputStream(parameters).getText()
     String availableBuildScriptHash = getVersionHash(availableBuildScript)
-    println "available: $availableBuildScriptHash"
 
     boolean isUpToDate = currentBuildScriptHash.empty || availableBuildScriptHash.empty || currentBuildScriptHash == availableBuildScriptHash
     return !isUpToDate
