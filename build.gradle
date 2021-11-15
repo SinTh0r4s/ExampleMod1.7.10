@@ -456,21 +456,22 @@ task updateBuildScript {
     }
 }
 
-Thread.start {
-    if (isNewBuildScriptVersionAvailable()) {
-        if (autoUpdateBuildScript.toBoolean()) {
-            updateBuildScript()
-        } else {
-            println("Build script update available! Run 'gradle updateBuildScript'")
-        }
+if (isNewBuildScriptVersionAvailable()) {
+    if (autoUpdateBuildScript.toBoolean()) {
+        updateBuildScript()
+    } else {
+        println("Build script update available! Run 'gradle updateBuildScript'")
     }
+}
+
+static URL availableBuildScriptUrl() {
+    new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle")
 }
 
 static boolean updateBuildScript() {
     if (isNewBuildScriptVersionAvailable()) {
         def buildscriptFile = new File("build.gradle")
-        new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle")
-                .withInputStream { i -> buildscriptFile.withOutputStream { it << i } }
+        availableBuildScriptUrl().withInputStream { i -> buildscriptFile.withOutputStream { it << i } }
         print("Build script updated. Please REIMPORT the project or RESTART your IDE!")
         return true
     }
@@ -482,10 +483,10 @@ static boolean isNewBuildScriptVersionAvailable() {
 
     String currentBuildScript = new File("build.gradle").getText()
     String currentBuildScriptHash = getVersionHash(currentBuildScript)
-
-    String availableBuildScript = new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle").newInputStream(parameters).getText()
+    println "current: $currentBuildScriptHash"
+    String availableBuildScript = availableBuildScriptUrl().newInputStream(parameters).getText()
     String availableBuildScriptHash = getVersionHash(availableBuildScript)
-
+    println "available: $availableBuildScriptHash"
 
     boolean isUpToDate = currentBuildScriptHash.empty || availableBuildScriptHash.empty || currentBuildScriptHash == availableBuildScriptHash
     return !isUpToDate
