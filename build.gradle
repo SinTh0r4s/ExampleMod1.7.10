@@ -49,46 +49,10 @@ idea {
 }
 
 
-if(JavaVersion.current() != JavaVersion.VERSION_1_8) {
-    throw new GradleException("This project requires Java 8, but it's running on " + JavaVersion.current())
-}
-
-static String getVersionHash(String buildScriptContent) {
-    String versionLine = buildScriptContent.find("^//version: [a-z0-9]*")
-    if(versionLine != null) {
-        return versionLine.split(": ").last()
-    }
-    return ""
-}
-
-static boolean isNewBuildScriptVersionAvailable() {
-    Thread.start {
-        Map parameters = ["connectTimeout": 2000, "readTimeout": 2000]
-        
-        String currentBuildScript = new File("build.gradle").getText()
-        String currentBuildScriptHash = getVersionHash(currentBuildScript)
-        
-        String availableBuildScript = new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle").newInputStream(parameters).getText()
-        String availableBuildScriptHash = getVersionHash(availableBuildScript)
-
-
-        boolean isUpToDate = currentBuildScriptHash.empty || availableBuildScriptHash.empty || currentBuildScriptHash == availableBuildScriptHash
-        return !isUpToDate
-    }
-}
-if(isNewBuildScriptVersionAvailable()) {
-    println("Build script update available! Run 'gradle updateBuildScript'")
-}
-
-def checkPropertyExsists(String propertyName) {
-    if (project.hasProperty(propertyName) == false) {
-        throw new GradleException("This project requires a property \"" + propertyName + "\"! Please add it your \"gradle.properties\". You can find all properties and their description here: https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/gradle.properties")
-    }
-}
-
 checkPropertyExsists("modName")
 checkPropertyExsists("modId")
 checkPropertyExsists("modGroup")
+checkPropertyExsists("autoUpdateBuildScript")
 checkPropertyExsists("minecraftVersion")
 checkPropertyExsists("forgeVersion")
 checkPropertyExsists("replaceGradleTokenInFile")
@@ -105,6 +69,59 @@ checkPropertyExsists("coreModClass")
 checkPropertyExsists("containsMixinsAndOrCoreModOnly")
 checkPropertyExsists("usesShadowedDependencies")
 checkPropertyExsists("developmentEnvironmentUserName")
+
+if(JavaVersion.current() != JavaVersion.VERSION_1_8) {
+    throw new GradleException("This project requires Java 8, but it's running on " + JavaVersion.current())
+}
+
+static String getVersionHash(String buildScriptContent) {
+    String versionLine = buildScriptContent.find("^//version: [a-z0-9]*")
+    if(versionLine != null) {
+        return versionLine.split(": ").last()
+    }
+    return ""
+}
+
+static boolean isNewBuildScriptVersionAvailable() {
+    Map parameters = ["connectTimeout": 2000, "readTimeout": 2000]
+
+    String currentBuildScript = new File("build.gradle").getText()
+    String currentBuildScriptHash = getVersionHash(currentBuildScript)
+
+    String availableBuildScript = new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle").newInputStream(parameters).getText()
+    String availableBuildScriptHash = getVersionHash(availableBuildScript)
+
+
+    boolean isUpToDate = currentBuildScriptHash.empty || availableBuildScriptHash.empty || currentBuildScriptHash == availableBuildScriptHash
+    return !isUpToDate
+}
+
+static boolean updateBuildScript() {
+    if (isNewBuildScriptVersionAvailable()) {
+        def builscriptFile = new File("build.gradle")
+        new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle")
+                .withInputStream { i -> builscriptFile.withOutputStream { it << i } }
+        print("Build script updated. Please REIMPORT the project or RESTART your IDE!")
+        return true
+    }
+    return false
+}
+
+Thread.start {
+    if (isNewBuildScriptVersionAvailable()) {
+        if (autoUpdateBuildScript.toBoolean()) {
+            updateBuildScript()
+        } else {
+            println("Build script update available! Run 'gradle updateBuildScript'")
+        }
+    }
+}
+
+def checkPropertyExsists(String propertyName) {
+    if (project.hasProperty(propertyName) == false) {
+        throw new GradleException("This project requires a property \"" + propertyName + "\"! Please add it your \"gradle.properties\". You can find all properties and their description here: https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/gradle.properties")
+    }
+}
 
 String targetPackage = "src/main/java/" + modGroup.toString().replaceAll("\\.", "/")
 if(new File(targetPackage).exists() == false) {
@@ -158,11 +175,8 @@ configurations.all {
 
 task updateBuildScript {
     doLast {
-        if (isNewBuildScriptVersionAvailable()) {
-            def builscriptFile  = new File("build.gradle")
-        new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle")
-                .withInputStream { i -> builscriptFile.withOutputStream { it << i } }
-            print("Build script updated. Please REIMPORT the project or RESTART your IDE!")
+        if (updateBuildScript() == false) {
+            print("Build script already up-to-date!")
         }
     }
 }
