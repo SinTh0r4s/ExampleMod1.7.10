@@ -27,7 +27,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.github.GTNH2:ForgeGradle:FG_1.2-SNAPSHOT'
+        classpath 'com.github.TheElan:ForgeGradle:8816f1d388'
     }
 }
 
@@ -49,75 +49,48 @@ idea {
 }
 
 
-checkPropertyExsists("modName")
-checkPropertyExsists("modId")
-checkPropertyExsists("modGroup")
-checkPropertyExsists("autoUpdateBuildScript")
-checkPropertyExsists("minecraftVersion")
-checkPropertyExsists("forgeVersion")
-checkPropertyExsists("replaceGradleTokenInFile")
-checkPropertyExsists("gradleTokenModId")
-checkPropertyExsists("gradleTokenModName")
-checkPropertyExsists("gradleTokenVersion")
-checkPropertyExsists("gradleTokenGroupName")
-checkPropertyExsists("apiPackage")
-checkPropertyExsists("accessTransformersFile")
-checkPropertyExsists("usesMixins")
-checkPropertyExsists("mixinPlugin")
-checkPropertyExsists("mixinsPackage")
-checkPropertyExsists("coreModClass")
-checkPropertyExsists("containsMixinsAndOrCoreModOnly")
-checkPropertyExsists("usesShadowedDependencies")
-checkPropertyExsists("developmentEnvironmentUserName")
+static boolean checkForUpdate() {
+    Thread.start {
+        Map parameters = ["connectTimeout": 2000, "readTimeout": 2000]
+        
+        String currentBuildScript = new File("build.gradle").getText()
+        String currentBuildScriptHash = getVersionHash(currentBuildScript)
+        
+        String availableBuildScript = new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle").newInputStream(parameters).getText()
+        String availableBuildScriptHash = getVersionHash(availableBuildScript)
+        
+        if (currentBuildScriptHash.empty || availableBuildScriptHash.empty || currentBuildScriptHash == availableBuildScriptHash)
+            return false
 
-if(JavaVersion.current() != JavaVersion.VERSION_1_8) {
-    throw new GradleException("This project requires Java 8, but it's running on " + JavaVersion.current())
-}
-
-static String getVersionHash(String buildScriptContent) {
-    String versionLine = buildScriptContent.find("^//version: [a-z0-9]*")
-    if(versionLine != null) {
-        return versionLine.split(": ").last()
-    }
-    return ""
-}
-
-static boolean isNewBuildScriptVersionAvailable() {
-    Map parameters = ["connectTimeout": 2000, "readTimeout": 2000]
-
-    String currentBuildScript = new File("build.gradle").getText()
-    String currentBuildScriptHash = getVersionHash(currentBuildScript)
-
-    String availableBuildScript = new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle").newInputStream(parameters).getText()
-    String availableBuildScriptHash = getVersionHash(availableBuildScript)
-
-
-    boolean isUpToDate = currentBuildScriptHash.empty || availableBuildScriptHash.empty || currentBuildScriptHash == availableBuildScriptHash
-    return !isUpToDate
-}
-
-static boolean updateBuildScript() {
-    if (isNewBuildScriptVersionAvailable()) {
-        def builscriptFile = new File("build.gradle")
-        new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle")
-                .withInputStream { i -> builscriptFile.withOutputStream { it << i } }
-        print("Build script updated. Please REIMPORT the project or RESTART your IDE!")
         return true
     }
-    return false
+}
+if(checkForUpdate()) {
+    println("Build script update available! Run 'gradle updateGTNHBuildScript'")
 }
 
-Thread.start {
-    if (isNewBuildScriptVersionAvailable()) {
-        if (autoUpdateBuildScript.toBoolean()) {
-            updateBuildScript()
-        } else {
-            println("Build script update available! Run 'gradle updateBuildScript'")
-        }
-    }
-}
+checkPropertyExists("modName")
+checkPropertyExists("modId")
+checkPropertyExists("modGroup")
+checkPropertyExists("autoUpdateBuildScript")
+checkPropertyExists("minecraftVersion")
+checkPropertyExists("forgeVersion")
+checkPropertyExists("replaceGradleTokenInFile")
+checkPropertyExists("gradleTokenModId")
+checkPropertyExists("gradleTokenModName")
+checkPropertyExists("gradleTokenVersion")
+checkPropertyExists("gradleTokenGroupName")
+checkPropertyExists("apiPackage")
+checkPropertyExists("accessTransformersFile")
+checkPropertyExists("usesMixins")
+checkPropertyExists("mixinPlugin")
+checkPropertyExists("mixinsPackage")
+checkPropertyExists("coreModClass")
+checkPropertyExists("containsMixinsAndOrCoreModOnly")
+checkPropertyExists("usesShadowedDependencies")
+checkPropertyExists("developmentEnvironmentUserName")
 
-def checkPropertyExsists(String propertyName) {
+def checkPropertyExists(String propertyName) {
     if (project.hasProperty(propertyName) == false) {
         throw new GradleException("This project requires a property \"" + propertyName + "\"! Please add it your \"gradle.properties\". You can find all properties and their description here: https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/gradle.properties")
     }
@@ -171,19 +144,6 @@ configurations.all {
     // Make sure GregTech build won't time out
     System.setProperty("org.gradle.internal.http.connectionTimeout", 120000 as String)
     System.setProperty("org.gradle.internal.http.socketTimeout", 120000 as String)
-}
-
-task updateBuildScript {
-    doLast {
-        if (updateBuildScript() == false) {
-            print("Build script already up-to-date!")
-        }
-    }
-}
-
-configure(updateBuildScript) {
-    group = 'forgegradle'
-    description = 'Updates the build script to the latest version'
 }
 
 // Fix Jenkins' Git: chmod a file should not be detected as a change and append a '.dirty' to the version
@@ -500,11 +460,67 @@ task apiJar(type: Jar) {
     getArchiveClassifier().set('api')
 }
 
-
 artifacts {
     archives sourcesJar
     archives devJar
     if(apiPackage) {
         archives apiJar
     }
+}
+
+// Updating
+task updateBuildScript {
+    doLast {
+        if (updateBuildScript()) return
+
+        print("Build script already up-to-date!")
+    }
+}
+
+Thread.start {
+    if (isNewBuildScriptVersionAvailable()) {
+        if (autoUpdateBuildScript.toBoolean()) {
+            updateBuildScript()
+        } else {
+            println("Build script update available! Run 'gradle updateBuildScript'")
+        }
+    }
+}
+
+static boolean updateBuildScript() {
+    if (isNewBuildScriptVersionAvailable()) {
+        def buildscriptFile = new File("build.gradle")
+        new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle")
+                .withInputStream { i -> buildscriptFile.withOutputStream { it << i } }
+        print("Build script updated. Please REIMPORT the project or RESTART your IDE!")
+        return true
+    }
+    return false
+}
+
+static boolean isNewBuildScriptVersionAvailable() {
+    Map parameters = ["connectTimeout": 2000, "readTimeout": 2000]
+
+    String currentBuildScript = new File("build.gradle").getText()
+    String currentBuildScriptHash = getVersionHash(currentBuildScript)
+
+    String availableBuildScript = new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle").newInputStream(parameters).getText()
+    String availableBuildScriptHash = getVersionHash(availableBuildScript)
+
+
+    boolean isUpToDate = currentBuildScriptHash.empty || availableBuildScriptHash.empty || currentBuildScriptHash == availableBuildScriptHash
+    return !isUpToDate
+}
+
+static String getVersionHash(String buildScriptContent) {
+    String versionLine = buildScriptContent.find("^//version: [a-z0-9]*")
+    if(versionLine != null) {
+        return versionLine.split(": ").last()
+    }
+    return ""
+}
+
+configure(updateBuildScript) {
+    group = 'forgegradle'
+    description = 'Updates the build script to the latest version'
 }
