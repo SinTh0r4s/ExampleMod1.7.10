@@ -61,7 +61,7 @@ static String getVersionHash(String buildScriptContent) {
     return ""
 }
 
-static boolean checkForUpdate() {
+static boolean isNewBuildScriptVersionAvailable() {
     Thread.start {
         Map parameters = ["connectTimeout": 2000, "readTimeout": 2000]
         
@@ -70,16 +70,14 @@ static boolean checkForUpdate() {
         
         String availableBuildScript = new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle").newInputStream(parameters).getText()
         String availableBuildScriptHash = getVersionHash(availableBuildScript)
-        
 
-        if (currentBuildScriptHash.empty || availableBuildScriptHash.empty || currentBuildScriptHash == availableBuildScriptHash)
-            return false
 
-        return true
+        boolean isUpToDate = currentBuildScriptHash.empty || availableBuildScriptHash.empty || currentBuildScriptHash == availableBuildScriptHash
+        return !isUpToDate
     }
 }
-if(checkForUpdate()) {
-    println("Build script update available! Run 'gradle updateGTNHBuildScript'")
+if(isNewBuildScriptVersionAvailable()) {
+    println("Build script update available! Run 'gradle updateBuildScript'")
 }
 
 def checkPropertyExsists(String propertyName) {
@@ -158,17 +156,18 @@ configurations.all {
     System.setProperty("org.gradle.internal.http.socketTimeout", 120000 as String)
 }
 
-task updateGTNHBuildScript {
+task updateBuildScript {
     doLast {
-        if (checkForUpdate()) {
-            def f = new File("build.gradle")
+        if (isNewBuildScriptVersionAvailable()) {
+            def builscriptFile  = new File("build.gradle")
         new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle")
-                .withInputStream { i -> f.withOutputStream { it << i } }
+                .withInputStream { i -> builscriptFile.withOutputStream { it << i } }
+            print("Build script updated. Please REIMPORT the project or RESTART your IDE!")
         }
     }
 }
 
-configure(updateGTNHBuildScript) {
+configure(updateBuildScript) {
     group = 'forgegradle'
     description = 'Updates the build script to the latest version'
 }
