@@ -61,7 +61,7 @@ static String getVersionHash(String buildScriptContent) {
     return ""
 }
 
-static def checkForUpdate() {
+static boolean checkForUpdate() {
     Thread.start {
         Map parameters = ["connectTimeout": 2000, "readTimeout": 2000]
         
@@ -71,12 +71,16 @@ static def checkForUpdate() {
         String availableBuildScript = new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle").newInputStream(parameters).getText()
         String availableBuildScriptHash = getVersionHash(availableBuildScript)
         
-        if (currentBuildScriptHash.empty || availableBuildScriptHash.empty || currentBuildScriptHash == availableBuildScriptHash) return
 
-        println("Build script update available! Check https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/build.gradle")
+        if (currentBuildScriptHash.empty || availableBuildScriptHash.empty || currentBuildScriptHash == availableBuildScriptHash)
+            return false
+
+        return true
     }
 }
-checkForUpdate()
+if(checkForUpdate()) {
+    println("Build script update available! Run 'gradle updateGTNHBuildScript'")
+}
 
 def checkPropertyExsists(String propertyName) {
     if (project.hasProperty(propertyName) == false) {
@@ -152,6 +156,21 @@ configurations.all {
     // Make sure GregTech build won't time out
     System.setProperty("org.gradle.internal.http.connectionTimeout", 120000 as String)
     System.setProperty("org.gradle.internal.http.socketTimeout", 120000 as String)
+}
+
+task updateGTNHBuildScript {
+    doLast {
+        if (checkForUpdate()) {
+            def f = new File("build.gradle")
+        new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle")
+                .withInputStream { i -> f.withOutputStream { it << i } }
+        }
+    }
+}
+
+configure(updateGTNHBuildScript) {
+    group = 'forgegradle'
+    description = 'Updates the build script to the latest version'
 }
 
 // Fix Jenkins' Git: chmod a file should not be detected as a change and append a '.dirty' to the version
