@@ -8,7 +8,7 @@ If they are missing in this document - we will gladly receive your suggestions/c
 1. Copy and replace all files from [template](https://github.com/SinTh0r4s/ExampleMod1.7.10/releases/download/latest-migration/migration.zip) to your repository, but `build.gradle`
 2. Copy all repositories from your `build.gradle(.kts)` to `repositories.gradle`
 3. Copy all dependencies from your `build.gradle(.kts)` to `dependecies.gradle`
-4. replace your `build.gradle(.kts)` with `build.gradle` from template. In case you have written some custom tasks/configurations not present in the template - move them to separate file and link it in this, like for example it does this with `dependencies.gradle`
+4. replace your `build.gradle(.kts)` with `build.gradle` from template. In case you have written some custom tasks/configurations not present in the template - move them into `addon.gradle`. It will automatically be integrated if present.
 5. Adapt `gradle.properties` to your mod
 6. Ensure `src/main/resources/mcmod.info` contains `${modId}`, `${modName}`. `${modVersion}` and `${minecraftVersion}`
 7. Re-import the project to your IDE (e.g. restart with clean caches in IntelliJ IDEA)
