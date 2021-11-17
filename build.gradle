@@ -27,7 +27,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.github.TheElan:ForgeGradle:8816f1d388'
+        classpath 'com.github.TheElan:ForgeGradle:f59d5c1f8d'
     }
 }
 
@@ -38,7 +38,13 @@ plugins {
 }
 
 apply plugin: 'forge'
-apply plugin: 'idea'
+apply plugin: 'idea'    
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+}
 
 idea {
     module {
