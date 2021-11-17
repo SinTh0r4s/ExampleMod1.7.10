@@ -1,4 +1,4 @@
-//version: ffe697dd74aa6d86eefa63372584006b5a6f1490
+//version: 4b2ebe38a6e125f4d08a6effeb1f13abdcb65fd5
 /*
 DO NOT CHANGE THIS FILE!
 
@@ -27,7 +27,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.github.TheElan:ForgeGradle:8816f1d388'
+        classpath 'com.github.TheElan:ForgeGradle:f59d5c1f8d'
     }
 }
 
@@ -38,7 +38,13 @@ plugins {
 }
 
 apply plugin: 'forge'
-apply plugin: 'idea'
+apply plugin: 'idea'    
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+}
 
 idea {
     module {
