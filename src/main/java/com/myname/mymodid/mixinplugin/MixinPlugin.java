@@ -11,6 +11,8 @@ import ru.timeconqueror.spongemixins.MinecraftURLClassPath;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,10 +20,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.myname.mymodid.mixinplugin.TargetedMod.VANILLA;
+import static java.nio.file.Files.walk;
 
 public class MixinPlugin implements IMixinConfigPlugin {
 
     private static final Logger LOG = LogManager.getLogger(Tags.MODID + " mixins");
+    private static final Path MODS_DIRECTORY_PATH = new File(Launch.minecraftHome, "mods/").toPath();
 
     @Override
     public void onLoad(String mixinPackage) {
@@ -51,8 +55,9 @@ public class MixinPlugin implements IMixinConfigPlugin {
         List<TargetedMod> loadedMods = Arrays.stream(TargetedMod.values())
                 .filter(mod -> mod == VANILLA
                         || (mod.loadInDevelopment && isDevelopmentEnvironment)
-                        || loadJar(mod.jarNameBeginsWith))
+                        || loadJarOf(mod))
                 .collect(Collectors.toList());
+
         for (TargetedMod mod : TargetedMod.values()) {
             if(loadedMods.contains(mod)) {
                 LOG.info("Found " + mod.modName + "! Integrating now...");
@@ -72,11 +77,11 @@ public class MixinPlugin implements IMixinConfigPlugin {
         return mixins;
     }
 
-    private boolean loadJar(final String jarNameBeginsWith) {
+    private boolean loadJarOf(final TargetedMod mod) {
         try {
-            File jar = MinecraftURLClassPath.getJarInModPath(jarNameBeginsWith);
+            File jar = findJarOf(mod);
             if(jar == null) {
-                LOG.info("Jar not found: " + jarNameBeginsWith);
+                LOG.info("Jar not found for " + mod);
                 return false;
             }
 
@@ -90,6 +95,20 @@ public class MixinPlugin implements IMixinConfigPlugin {
         catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public static File findJarOf(final TargetedMod mod) {
+        try {
+            return walk(MODS_DIRECTORY_PATH)
+                    .filter(mod::isMatchingJar)
+                    .map(Path::toFile)
+                    .findFirst()
+                    .orElse(null);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
