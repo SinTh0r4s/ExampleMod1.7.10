@@ -36,7 +36,7 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest-starer"
+          automatic_release_tag: "latest-stater"
           prerelease: true
           title: "Latest starter package"
           files: "starter.zip"
