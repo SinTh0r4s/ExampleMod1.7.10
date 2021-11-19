@@ -27,7 +27,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.github.TheElan:ForgeGradle:f59d5c1f8d'
+        classpath 'com.github.TheElan:ForgeGradle:1.2.1'
     }
 }
 
