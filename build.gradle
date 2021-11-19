@@ -133,7 +133,7 @@ if(coreModClass) {
     String targetFileJava = javaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + coreModClass.toString().replaceAll("\\.", "/") + ".java"
     String targetFileScala = scalaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + coreModClass.toString().replaceAll("\\.", "/") + ".scala"
     if((new File(targetFileJava).exists() || new File(targetFileScala).exists()) == false) {
-        throw new GradleException("Could not resolve \"coreModClass\"! Could not find " + targetFile + " or " + targetFileScala)
+        throw new GradleException("Could not resolve \"coreModClass\"! Could not find " + targetFileJava + " or " + targetFileScala)
     }
 }
 
