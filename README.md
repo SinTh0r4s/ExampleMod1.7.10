@@ -33,7 +33,7 @@ We also have described guidelines for existing mod [migration](docs/migration.md
  - Optional version replacement in Java files
  - Optional shadowing of dependencies
  - Simplified setup of Mixin and example
- - Scala support
+ - Scala support (add sources under `src/main/scala/` instead of `src/main/java/`)
  - Optional named developer account for consistent player progression during testing
  - Boilerplate forge mod as starting point
  - Improved warnings for pitfalls
