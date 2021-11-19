@@ -25,6 +25,10 @@ buildscript {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
+        maven {
+            name = "Scala CI dependencies"
+            url = "https://repo1.maven.org/maven2/"
+        }
     }
     dependencies {
         classpath 'com.github.TheElan:ForgeGradle:1.2.2'
