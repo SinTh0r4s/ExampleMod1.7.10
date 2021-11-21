@@ -1,29 +1,35 @@
-# This workflow only meant for the source mod you shouldn't bring it into your own project
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Release packages
+name: Release starter and migration packages
 
 on:
   push:
-    branches: [ master, main ]
+    tags:
+      - '*'
 
 jobs:
-  zip-packages:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Prepare release folder
+        run: |
+          mkdir packages
+
       - name: Zip starter
         uses: montudor/action-zip@v1
         with:
           args: >
-            zip -r starter.zip . \
+            zip -r packages/starter.zip . \
                 \
                 -x "*.git/*" \
                 \
                 -x ".github/scripts/update-version.sh" \
                 -x ".github/workflows/buildscript-maintenance.yml" \
-                -x ".github/workflows/package-release.yml" \
+                -x ".github/workflows/release-packages.yml" \
                 \
                 -x "*docs/*" \
                 -x "README.md" \
@@ -32,26 +38,17 @@ jobs:
                 -x "starter.zip" \
                 -x "migration.zip"
 
-      - name: Publish starter package
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest-stater"
-          prerelease: true
-          title: "Latest starter package"
-          files: "starter.zip"
-
       - name: Zip migration
         uses: montudor/action-zip@v1
         with:
           args: >
-            zip -r migration.zip . \
+            zip -r packages/migration.zip . \
                 \
                 -x "*.git/*" \
                 \
                 -x ".github/scripts/update-version.sh" \
                 -x ".github/workflows/buildscript-maintenance.yml" \
-                -x ".github/workflows/package-release.yml" \
+                -x ".github/workflows/release-packages.yml" \
                 \
                 -x "*docs/*" \
                 -x "*src/*" \
@@ -60,12 +57,21 @@ jobs:
                 \
                 -x "starter.zip" \
                 -x "migration.zip"
-            
-      - name: Publish migration package
+
+      - name: Release under current tag
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}-packages"
+          automatic_release_tag: "${GITHUB_REF##*/}"
+          prerelease: false
+          title: "${GITHUB_REF##*/}: starter and migration packages"
+          files: packages/*
+
+      - name: Update latest tag
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest-migration"
-          prerelease: true
-          title: "Latest migration package"
-          files: "migration.zip"
+          automatic_release_tag: "latest-packages"
+          prerelease: false
+          title: "Latest starter and migration packages"
+          files: packages/*
