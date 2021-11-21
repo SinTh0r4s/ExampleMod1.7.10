@@ -1,4 +1,4 @@
-//version: 4d454e82ff05d5b338035b58a3485a341f91168d
+//version: 1fc864ac9e3945981c864c3492bdd57330f9fe70
 /*
 DO NOT CHANGE THIS FILE!
 
@@ -8,6 +8,7 @@ Please check https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/build.gradl
 
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 import java.util.concurrent.TimeUnit
 
@@ -224,11 +225,6 @@ dependencies {
 
 apply from: 'dependencies.gradle'
 
-task relocateShadowJar(type: ConfigureShadowRelocation) {
-    target = tasks.shadowJar
-    prefix = modGroup + ".shadow"
-}
-
 def mixinConfigJson = "mixins." + modId + ".json"
 def mixingConfigRefMap = "mixins." + modId + ".refmap.json"
 def refMap = "${tasks.compileJava.temporaryDir}" + File.separator + mixingConfigRefMap
@@ -250,12 +246,17 @@ task generateAssets {
     }
 }
 
+task relocateShadowJar(type: ConfigureShadowRelocation) {
+    target = tasks.shadowJar
+    prefix = modGroup + ".shadow"
+}
+
 shadowJar {
     manifest {
         attributes(getManifestAttributes())
     }
 
-    minimize()
+    minimize()  // This will only allow shading for actually used classes
     configurations = [project.configurations.shadowImplementation]
     dependsOn(relocateShadowJar)
 }
@@ -384,10 +385,29 @@ task sourcesJar(type: Jar) {
     from (sourceSets.main.allJava)
     from (file("$projectDir/LICENSE"))
     getArchiveClassifier().set('sources')
+}
+
+task shadowDevJar(type: ShadowJar) {
+    from sourceSets.main.output
+    getArchiveClassifier().set("dev")
 
     manifest {
         attributes(getManifestAttributes())
     }
+
+    minimize()  // This will only allow shading for actually used classes
+    configurations = [project.configurations.shadowImplementation]
+}
+
+task relocateShadowDevJar(type: ConfigureShadowRelocation) {
+    target = tasks.shadowDevJar
+    prefix = modGroup + ".shadow"
+}
+
+task circularResolverJar(type: Jar) {
+    dependsOn(relocateShadowDevJar)
+    dependsOn(shadowDevJar)
+    enabled = false
 }
 
 task devJar(type: Jar) {
@@ -396,6 +416,11 @@ task devJar(type: Jar) {
 
     manifest {
         attributes(getManifestAttributes())
+    }
+
+    if(usesShadowedDependencies.toBoolean()) {
+        dependsOn(shadowDevJar)
+        enabled = false
     }
 }
 
@@ -417,7 +442,7 @@ task apiJar(type: Jar) {
 
 artifacts {
     archives sourcesJar
-    archives devJar
+    archives circularResolverJar
     if(apiPackage) {
         archives apiJar
     }
