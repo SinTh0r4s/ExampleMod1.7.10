@@ -31,7 +31,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.github.TheElan:ForgeGradle:1.2.2'
+        classpath 'com.github.GTNewHorizons:ForgeGradle:1.2.3'
     }
 }
 
@@ -188,6 +188,10 @@ configurations {
 }
 
 repositories {
+    maven {
+        name = "Overmind forge repo mirror"
+        url = "https://gregtech.overminddl1.com/"
+    }
     if(usesMixins.toBoolean()) {
         maven {
             name = "sponge"
