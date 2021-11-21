@@ -31,10 +31,12 @@ jobs:
     - name: Build the mod
       run: ./gradlew build
     
-    - name: Run server with mod
+    - name: Try running server
       timeout-minutes: 1
-      run: ./gradlew runServer
+      run: |
+        mkdir run
+        echo "eula=true" > run/eula.txt  
+        ./gradlew runServer
 
-    - name: Run client with mod
-      timeout-minutes: 1
-      run: ./gradlew runClient
+    - name: Test if any crash reports are present
+      run: .github/scripts/test-crash-reports.sh
