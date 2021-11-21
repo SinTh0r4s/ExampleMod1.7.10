@@ -64,10 +64,10 @@ jobs:
       - name: Release under current tag
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}-packages"
-          automatic_release_tag: "${{ env.RELEASE_VERSION }}"
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "${{ env.RELEASE_VERSION }}-packages"
           prerelease: false
-          title: "${{ env.RELEASE_VERSION }}: starter and migration packages"
+          title: "${{ env.RELEASE_VERSION }} starter and migration packages"
           files: packages/*
 
       - name: Update latest tag
