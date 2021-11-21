@@ -36,14 +36,14 @@ buildscript {
 }
 
 plugins {
+    id 'idea'
+    id 'scala'
     id("org.ajoberstar.grgit") version("3.1.1")
     id("com.github.johnrengelman.shadow") version("4.0.4")
     id("com.palantir.git-version") version("0.12.3")
 }
 
-apply plugin: 'scala'
 apply plugin: 'forge'
-apply plugin: 'idea'
 
 def projectJavaVersion = JavaLanguageVersion.of(8)
 

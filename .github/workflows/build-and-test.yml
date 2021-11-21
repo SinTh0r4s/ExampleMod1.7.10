@@ -6,9 +6,11 @@ name: Build and test
 on:
   pull_request:
     branches: [ master, main ]
+  push:
+    branches: [ master, main ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -30,3 +32,14 @@ jobs:
     
     - name: Build the mod
       run: ./gradlew build
+
+    - name: Run server for 1 minute
+      run: |
+        mkdir run
+        echo "eula=true" > run/eula.txt  
+        timeout 10 ./gradlew runServer || true
+
+    - name: Test no crashes happend
+      run: |
+        chmod +x .github/scripts/test-no-crash-reports.sh
+        .github/scripts/test-no-crash-reports.sh
