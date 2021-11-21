@@ -39,4 +39,6 @@ jobs:
         ./gradlew runServer
 
     - name: Test if any crash reports are present
-      run: .github/scripts/test-crash-reports.sh
+      run: |
+        chmod +x .github/scripts/test-crash-reports.sh
+        .github/scripts/test-crash-reports.sh
