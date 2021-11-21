@@ -5,7 +5,8 @@ name: Build and release main branch
 
 on:
   push:
-    branches: [ master, main ]
+    tags:
+      - '*'
 
 jobs:
   build:
@@ -34,8 +35,8 @@ jobs:
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest"
+        automatic_release_tag: "${GITHUB_REF##*/}"
         prerelease: true
-        title: "Latest Development Build"
+        title: "${GITHUB_REF##*/}"
         files: build/libs/*.jar
             
