@@ -15,6 +15,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Set release version
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
       - name: Prepare release folder
         run: |
           mkdir packages
@@ -62,9 +65,9 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}-packages"
-          automatic_release_tag: "${GITHUB_REF##*/}"
+          automatic_release_tag: "${{ env.RELEASE_VERSION }}"
           prerelease: false
-          title: "${GITHUB_REF##*/}: starter and migration packages"
+          title: "${{ env.RELEASE_VERSION }}: starter and migration packages"
           files: packages/*
 
       - name: Update latest tag
