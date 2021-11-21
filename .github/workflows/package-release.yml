@@ -24,6 +24,7 @@ jobs:
                 -x ".github/scripts/update-version.sh" \
                 -x ".github/workflows/buildscript-maintenance.yml" \
                 -x ".github/workflows/package-release.yml" \
+                -x ".github/workflows/toolchain-compatibility.yml" \
                 \
                 -x "*docs/*" \
                 -x "README.md" \
@@ -52,6 +53,7 @@ jobs:
                 -x ".github/scripts/update-version.sh" \
                 -x ".github/workflows/buildscript-maintenance.yml" \
                 -x ".github/workflows/package-release.yml" \
+                -x ".github/workflows/toolchain-compatibility.yml" \
                 \
                 -x "*docs/*" \
                 -x "*src/*" \
