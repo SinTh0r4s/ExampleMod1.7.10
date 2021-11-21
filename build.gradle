@@ -427,6 +427,11 @@ task sourcesJar(type: Jar) {
     manifest {
         attributes(manifestAttributes)
     }
+
+    if(usesShadowedDependencies.toBoolean()) {
+        dependsOn(shadowJar)
+        enabled = false
+    }
 }
 
 task devJar(type: Jar) {
@@ -456,6 +461,11 @@ task devJar(type: Jar) {
     }
     manifest {
         attributes(manifestAttributes)
+    }
+
+    if(usesShadowedDependencies.toBoolean()) {
+        dependsOn(shadowJar)
+        enabled = false
     }
 }
 
