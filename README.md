@@ -40,6 +40,7 @@ We also have described guidelines for existing mod [migration](docs/migration.md
  - Git Tags integration for versioning
  - GitHub CI
  - [Jitpack](https://jitpack.io) CI
+ - Releasing your artifacts on new tags pushed. Push git tag named after version (e.g. 1.0.0) which will trigger a release of artifacts with according names.
 
 ### Files
  - [`build.gradle`](https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/build.gradle): This is the core script of the build process. You should not need to tamper with it, unless you are trying to accomplish something out of the ordinary. __Do not touch this file! You will make a future update near impossible if you do so!__
