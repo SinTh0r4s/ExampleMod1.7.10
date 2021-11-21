@@ -9,7 +9,7 @@ on:
       - '*'
 
 jobs:
-  build:
+  zip-and-release-packages:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
