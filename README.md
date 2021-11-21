@@ -16,7 +16,7 @@ We all have been there! Check out our [FAQ](https://github.com/SinTh0r4s/Example
 ### Getting started
 
 Creating mod from scratch:
-1. Unzip [project starter](https://github.com/SinTh0r4s/ExampleMod1.7.10/releases/download/latest-starer/starter.zip) into project directory.
+1. Unzip [project starter](https://github.com/SinTh0r4s/ExampleMod1.7.10/releases/download/latest-packages/starter.zip) into project directory.
 2. Replace placeholders in LICENSE-template and rename it to LICENSE, or remove LICENSE-template and put any other license you like on your code. This is an permissive OSS project and we encourage you participate in OSS movement by having permissive license like one in template. You can find out pros and cons of OSS software in [this article](https://www.freecodecamp.org/news/what-is-great-about-developing-open-source-and-what-is-not/)
 3. Ensure your project is under VCS. For example initialise git repository by running `git init; git commit --message "initialized repository"`.
 4. Replace placeholders (edit values in gradle.properties, change example package and class names, etc.)
@@ -40,6 +40,7 @@ We also have described guidelines for existing mod [migration](docs/migration.md
  - Git Tags integration for versioning
  - GitHub CI
  - [Jitpack](https://jitpack.io) CI
+ - Releasing your artifacts on new tags pushed. Push git tag named after version (e.g. 1.0.0) which will trigger a release of artifacts with according names.
 
 ### Files
  - [`build.gradle`](https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/build.gradle): This is the core script of the build process. You should not need to tamper with it, unless you are trying to accomplish something out of the ordinary. __Do not touch this file! You will make a future update near impossible if you do so!__
