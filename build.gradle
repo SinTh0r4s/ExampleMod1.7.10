@@ -251,29 +251,8 @@ task generateAssets {
 }
 
 shadowJar {
-    def manifestAttributes = [:]
-    if(containsMixinsAndOrCoreModOnly.toBoolean() == false) {
-        manifestAttributes += ["FMLCorePluginContainsFMLMod": true]
-    }
-
-    if(accessTransformersFile) {
-        manifestAttributes += ["FMLAT" : accessTransformersFile.toString()]
-    }
-
-    if(coreModClass) {
-        manifestAttributes += ["FMLCorePlugin": modGroup + "." + coreModClass]
-    }
-
-    if(usesMixins.toBoolean()) {
-        from refMap
-        manifestAttributes += [
-                "TweakClass" : "org.spongepowered.asm.launch.MixinTweaker",
-                "MixinConfigs" : mixinConfigJson,
-                "ForceLoadAsMod" : containsMixinsAndOrCoreModOnly.toBoolean() == false
-        ]
-    }
     manifest {
-        attributes(manifestAttributes)
+        attributes(getManifestAttributes())
     }
 
     minimize()
@@ -282,29 +261,8 @@ shadowJar {
 }
 
 jar {
-    def manifestAttributes = [:]
-    if(containsMixinsAndOrCoreModOnly.toBoolean() == false) {
-        manifestAttributes += ["FMLCorePluginContainsFMLMod": true]
-    }
-
-    if(accessTransformersFile) {
-        manifestAttributes += ["FMLAT" : accessTransformersFile.toString()]
-    }
-
-    if(coreModClass) {
-        manifestAttributes += ["FMLCorePlugin": modGroup + "." + coreModClass]
-    }
-
-    if(usesMixins.toBoolean()) {
-        from refMap
-        manifestAttributes += [
-                "TweakClass" : "org.spongepowered.asm.launch.MixinTweaker",
-                "MixinConfigs" : mixinConfigJson,
-                "ForceLoadAsMod" : containsMixinsAndOrCoreModOnly.toBoolean() == false
-        ]
-    }
     manifest {
-        attributes(manifestAttributes)
+        attributes(getManifestAttributes())
     }
 
     if(usesShadowedDependencies.toBoolean()) {
@@ -385,17 +343,41 @@ processResources
             from(sourceSets.main.resources.srcDirs) {
                 include 'mcmod.info'
 
-        // replace version and mcversion
-        expand "minecraftVersion": project.minecraft.version,
-                "modVersion": versionDetails().lastTag,
-                "modId": modId,
-                "modName": modName
+                // replace version and mcversion
+                expand "minecraftVersion": project.minecraft.version,
+                        "modVersion": versionDetails().lastTag,
+                        "modId": modId,
+                        "modName": modName
+            }
+
+            // copy everything else, thats not the mcmod.info
+            from(sourceSets.main.resources.srcDirs) {
+                exclude 'mcmod.info'
+            }
+        }
+
+def getManifestAttributes() {
+    def manifestAttributes = [:]
+    if(containsMixinsAndOrCoreModOnly.toBoolean() == false) {
+        manifestAttributes += ["FMLCorePluginContainsFMLMod": true]
     }
 
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+    if(accessTransformersFile) {
+        manifestAttributes += ["FMLAT" : accessTransformersFile.toString()]
     }
+
+    if(coreModClass) {
+        manifestAttributes += ["FMLCorePlugin": modGroup + "." + coreModClass]
+    }
+
+    if(usesMixins.toBoolean()) {
+        manifestAttributes += [
+                "TweakClass" : "org.spongepowered.asm.launch.MixinTweaker",
+                "MixinConfigs" : mixinConfigJson,
+                "ForceLoadAsMod" : containsMixinsAndOrCoreModOnly.toBoolean() == false
+        ]
+    }
+    return manifestAttributes
 }
 
 task sourcesJar(type: Jar) {
@@ -403,34 +385,8 @@ task sourcesJar(type: Jar) {
     from (file("$projectDir/LICENSE"))
     getArchiveClassifier().set('sources')
 
-    def manifestAttributes = [:]
-    if(containsMixinsAndOrCoreModOnly.toBoolean() == false) {
-        manifestAttributes += ["FMLCorePluginContainsFMLMod": true]
-    }
-
-    if(accessTransformersFile) {
-        manifestAttributes += ["FMLAT" : accessTransformersFile.toString()]
-    }
-
-    if(coreModClass) {
-        manifestAttributes += ["FMLCorePlugin": modGroup + "." + coreModClass]
-    }
-
-    if(usesMixins.toBoolean()) {
-        from refMap
-        manifestAttributes += [
-                "TweakClass" : "org.spongepowered.asm.launch.MixinTweaker",
-                "MixinConfigs" : mixinConfigJson,
-                "ForceLoadAsMod" : containsMixinsAndOrCoreModOnly.toBoolean() == false
-        ]
-    }
     manifest {
-        attributes(manifestAttributes)
-    }
-
-    if(usesShadowedDependencies.toBoolean()) {
-        dependsOn(shadowJar)
-        enabled = false
+        attributes(getManifestAttributes())
     }
 }
 
@@ -438,34 +394,8 @@ task devJar(type: Jar) {
     from sourceSets.main.output
     getArchiveClassifier().set("dev")
 
-    def manifestAttributes = [:]
-    if(containsMixinsAndOrCoreModOnly.toBoolean() == false) {
-        manifestAttributes += ["FMLCorePluginContainsFMLMod": true]
-    }
-
-    if(accessTransformersFile) {
-        manifestAttributes += ["FMLAT" : accessTransformersFile.toString()]
-    }
-
-    if(coreModClass) {
-        manifestAttributes += ["FMLCorePlugin": modGroup + "." + coreModClass]
-    }
-
-    if(usesMixins.toBoolean()) {
-        from refMap
-        manifestAttributes += [
-                "TweakClass" : "org.spongepowered.asm.launch.MixinTweaker",
-                "MixinConfigs" : mixinConfigJson,
-                "ForceLoadAsMod" : containsMixinsAndOrCoreModOnly.toBoolean() == false
-        ]
-    }
     manifest {
-        attributes(manifestAttributes)
-    }
-
-    if(usesShadowedDependencies.toBoolean()) {
-        dependsOn(shadowJar)
-        enabled = false
+        attributes(getManifestAttributes())
     }
 }
 
