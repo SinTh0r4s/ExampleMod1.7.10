@@ -1,0 +1,73 @@
+# This workflow only meant for the source mod you shouldn't bring it into your own project
+
+name: Release starter and migration packages
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  zip-and-release-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set release version
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+      - name: Prepare release folder
+        run: |
+          mkdir packages
+
+      - name: Zip starter
+        uses: montudor/action-zip@v1
+        with:
+          args: >
+            zip -r packages/starter.zip . \
+                \
+                -x "*.git/*" \
+                \
+                -x ".github/scripts/update-version.sh" \
+                -x ".github/workflows/buildscript-maintenance.yml" \
+                -x ".github/workflows/release-packages-latest.yml" \
+                -x ".github/workflows/toolchain-compatibility.yml" \
+                \
+                -x "*docs/*" \
+                -x "README.md" \
+                -x "LICENSE" \
+                \
+                -x "starter.zip" \
+                -x "migration.zip"
+
+      - name: Zip migration
+        uses: montudor/action-zip@v1
+        with:
+          args: >
+            zip -r packages/migration.zip . \
+                \
+                -x "*.git/*" \
+                \
+                -x ".github/scripts/update-version.sh" \
+                -x ".github/workflows/buildscript-maintenance.yml" \
+                -x ".github/workflows/release-packages-latest.yml" \
+                -x ".github/workflows/release-packages-tags.yml" \
+                -x ".github/workflows/toolchain-compatibility.yml" \
+                \
+                -x "*docs/*" \
+                -x "*src/*" \
+                -x "LICENSE" \
+                -x "README.md" \
+                \
+                -x "starter.zip" \
+                -x "migration.zip"
+
+      - name: Release under current tag
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "${{ env.RELEASE_VERSION }}-packages"
+          prerelease: false
+          title: "${{ env.RELEASE_VERSION }} starter and migration packages"
+          files: packages/*
