@@ -419,7 +419,7 @@ task devJar(type: Jar) {
     }
 
     if(usesShadowedDependencies.toBoolean()) {
-        dependsOn(shadowDevJar)
+        dependsOn(circularResolverJar)
         enabled = false
     }
 }
@@ -442,7 +442,7 @@ task apiJar(type: Jar) {
 
 artifacts {
     archives sourcesJar
-    archives circularResolverJar
+    archives devJar
     if(apiPackage) {
         archives apiJar
     }
