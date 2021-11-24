@@ -225,14 +225,13 @@ dependencies {
 
 apply from: 'dependencies.gradle'
 
-def mixinConfigJson = "mixins." + modId + ".json"
 def mixingConfigRefMap = "mixins." + modId + ".refmap.json"
 def refMap = "${tasks.compileJava.temporaryDir}" + File.separator + mixingConfigRefMap
 def mixinSrg = "${tasks.reobf.temporaryDir}" + File.separator + "mixins.srg"
 
 task generateAssets {
     if(usesMixins.toBoolean()) {
-        new File(projectDir.toString() + "/src/main/resources/", mixinConfigJson).text = """{
+        new File(projectDir.toString() + "/src/main/resources/", "mixins." + modId + ".json").text = """{
   "required": true,
   "minVersion": "0.7.11",
   "package": "${modGroup}.${mixinsPackage}",
@@ -374,7 +373,7 @@ def getManifestAttributes() {
     if(usesMixins.toBoolean()) {
         manifestAttributes += [
                 "TweakClass" : "org.spongepowered.asm.launch.MixinTweaker",
-                "MixinConfigs" : mixinConfigJson,
+                "MixinConfigs" : "mixins." + modId + ".json",
                 "ForceLoadAsMod" : containsMixinsAndOrCoreModOnly.toBoolean() == false
         ]
     }
