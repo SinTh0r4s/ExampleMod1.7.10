@@ -350,6 +350,10 @@ processResources
                         "modName": modName
             }
 
+            if(usesMixins.toBoolean()) {
+                from refMap
+            }
+
             // copy everything else, thats not the mcmod.info
             from(sourceSets.main.resources.srcDirs) {
                 exclude 'mcmod.info'
