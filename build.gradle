@@ -153,7 +153,12 @@ configurations.all {
 // Fix Jenkins' Git: chmod a file should not be detected as a change and append a '.dirty' to the version
 'git config core.fileMode false'.execute()
 // Pulls version from git tag
-version = minecraftVersion + "-" + gitVersion()
+try {
+    version = minecraftVersion + "-" + gitVersion()
+}
+catch (Exception e) {
+    throw new IllegalStateException("This mod must be version controlled by Git AND the repository must provide at least one tag!");
+}
 group = modGroup
 archivesBaseName = modId
 
