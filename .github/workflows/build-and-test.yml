@@ -37,7 +37,7 @@ jobs:
       run: |
         mkdir run
         echo "eula=true" > run/eula.txt  
-        timeout 10 ./gradlew runServer || true
+        timeout 60 ./gradlew runServer || true
 
     - name: Test no crashes happend
       run: |
