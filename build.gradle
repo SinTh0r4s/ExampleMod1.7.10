@@ -163,8 +163,14 @@ try {
 catch (Exception e) {
     throw new IllegalStateException("This mod must be version controlled by Git AND the repository must provide at least one tag!");
 }
+
 group = modGroup
-archivesBaseName = modId
+if(project.hasProperty("customArchiveBaseName") && customArchiveBaseName) {
+    archivesBaseName = customArchiveBaseName
+}
+else {
+    archivesBaseName = modId
+}
 
 minecraft {
     version = minecraftVersion + "-" + forgeVersion + "-" + minecraftVersion
