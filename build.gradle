@@ -99,21 +99,21 @@ String scalaSourceDir = "src/main/scala/"
 
 String targetPackageJava = javaSourceDir + modGroup.toString().replaceAll("\\.", "/")
 String targetPackageScala = scalaSourceDir + modGroup.toString().replaceAll("\\.", "/")
-if((new File(targetPackageJava).exists() || new File(targetPackageScala).exists()) == false) {
+if((new File(projectDir, targetPackageJava).exists() || new File(projectDir, targetPackageScala).exists()) == false) {
     throw new GradleException("Could not resolve \"modGroup\"! Could not find " + targetPackageJava + " or " + targetPackageScala)
 }
 
 if(apiPackage) {
     targetPackageJava = javaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + apiPackage.toString().replaceAll("\\.", "/")
     targetPackageScala = scalaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + apiPackage.toString().replaceAll("\\.", "/")
-    if((new File(targetPackageJava).exists() || new File(targetPackageScala).exists()) == false) {
+    if((new File(projectDir, targetPackageJava).exists() || new File(projectDir, targetPackageScala).exists()) == false) {
         throw new GradleException("Could not resolve \"apiPackage\"! Could not find " + targetPackageJava + " or " + targetPackageScala)
     }
 }
 
 if(accessTransformersFile) {
     String targetFile = "src/main/resources/META-INF/" + accessTransformersFile
-    if(new File(targetFile).exists() == false) {
+    if(new File(projectDir, targetFile).exists() == false) {
         throw new GradleException("Could not resolve \"accessTransformersFile\"! Could not find " + targetFile)
     }
 }
@@ -125,14 +125,14 @@ if(usesMixins.toBoolean()) {
 
     targetPackageJava = javaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + mixinsPackage.toString().replaceAll("\\.", "/")
     targetPackageScala = scalaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + mixinsPackage.toString().replaceAll("\\.", "/")
-    if((new File(targetPackageJava).exists() || new File(targetPackageScala).exists()) == false) {
+    if((new File(projectDir, targetPackageJava).exists() || new File(projectDir, targetPackageScala).exists()) == false) {
         throw new GradleException("Could not resolve \"mixinsPackage\"! Could not find " + targetPackageJava + " or " + targetPackageScala)
     }
 
     String targetFileJava = javaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + mixinPlugin.toString().replaceAll("\\.", "/") + ".java"
     String targetFileScala = scalaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + mixinPlugin.toString().replaceAll("\\.", "/") + ".scala"
     String targetFileScalaJava = scalaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + mixinPlugin.toString().replaceAll("\\.", "/") + ".java"
-    if((new File(targetFileJava).exists() || new File(targetFileScala).exists() || new File(targetFileScalaJava).exists()) == false) {
+    if((new File(projectDir, targetFileJava).exists() || new File(projectDir, targetFileScala).exists() || new File(projectDir, targetFileScalaJava).exists()) == false) {
         throw new GradleException("Could not resolve \"mixinPlugin\"! Could not find " + targetFileJava + " or " + targetFileScala + " or " + targetFileScalaJava)
     }
 }
@@ -141,7 +141,7 @@ if(coreModClass) {
     String targetFileJava = javaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + coreModClass.toString().replaceAll("\\.", "/") + ".java"
     String targetFileScala = scalaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + coreModClass.toString().replaceAll("\\.", "/") + ".scala"
     String targetFileScalaJava = scalaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + coreModClass.toString().replaceAll("\\.", "/") + ".java"
-    if((new File(targetFileJava).exists() || new File(targetFileScala).exists() || new File(targetFileScalaJava).exists()) == false) {
+    if((new File(projectDir, targetFileJava).exists() || new File(projectDir, targetFileScala).exists() || new File(projectDir, targetFileScalaJava).exists()) == false) {
         throw new GradleException("Could not resolve \"coreModClass\"! Could not find " + targetFileJava + " or " + targetFileScala + " or " + targetFileScalaJava)
     }
 }
@@ -469,15 +469,15 @@ artifacts {
 // Updating
 task updateBuildScript {
     doLast {
-        if (updateBuildScript()) return
+        if (performBuildScriptUpdate(projectDir.toString())) return
 
         print("Build script already up-to-date!")
     }
 }
 
-if (isNewBuildScriptVersionAvailable()) {
+if (isNewBuildScriptVersionAvailable(projectDir.toString())) {
     if (autoUpdateBuildScript.toBoolean()) {
-        updateBuildScript()
+        performBuildScriptUpdate(projectDir.toString())
     } else {
         println("Build script update available! Run 'gradle updateBuildScript'")
     }
@@ -487,9 +487,9 @@ static URL availableBuildScriptUrl() {
     new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle")
 }
 
-static boolean updateBuildScript() {
-    if (isNewBuildScriptVersionAvailable()) {
-        def buildscriptFile = new File("build.gradle")
+static boolean performBuildScriptUpdate(String projectDir) {
+    if (isNewBuildScriptVersionAvailable(projectDir)) {
+        def buildscriptFile = new File(projectDir, "build.gradle")
         availableBuildScriptUrl().withInputStream { i -> buildscriptFile.withOutputStream { it << i } }
         print("Build script updated. Please REIMPORT the project or RESTART your IDE!")
         return true
@@ -497,10 +497,10 @@ static boolean updateBuildScript() {
     return false
 }
 
-static boolean isNewBuildScriptVersionAvailable() {
+static boolean isNewBuildScriptVersionAvailable(String projectDir) {
     Map parameters = ["connectTimeout": 2000, "readTimeout": 2000]
 
-    String currentBuildScript = new File("build.gradle").getText()
+    String currentBuildScript = new File(projectDir, "build.gradle").getText()
     String currentBuildScriptHash = getVersionHash(currentBuildScript)
     String availableBuildScript = availableBuildScriptUrl().newInputStream(parameters).getText()
     String availableBuildScriptHash = getVersionHash(availableBuildScript)
