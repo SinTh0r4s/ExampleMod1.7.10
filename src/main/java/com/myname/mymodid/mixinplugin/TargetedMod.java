@@ -32,7 +32,7 @@ public enum TargetedMod {
         final String nameLowerCase = Files.getNameWithoutExtension(pathString).toLowerCase();
         final String fileExtension = Files.getFileExtension(pathString);
 
-        return nameLowerCase.startsWith(jarNamePrefixLowercase) && "jar".equals(fileExtension);
+        return nameLowerCase.startsWith(jarNamePrefixLowercase) && ("jar".equals(fileExtension) || "litemod".equals(fileExtension));
     }
 
     @Override
