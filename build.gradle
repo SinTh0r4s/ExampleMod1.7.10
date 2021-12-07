@@ -87,16 +87,6 @@ checkPropertyExists("containsMixinsAndOrCoreModOnly")
 checkPropertyExists("usesShadowedDependencies")
 checkPropertyExists("developmentEnvironmentUserName")
 
-def checkPropertyExists(String propertyName) {
-    if (project.hasProperty(propertyName) == false) {
-        throw new GradleException("This project requires a property \"" + propertyName + "\"! Please add it your \"gradle.properties\". You can find all properties and their description here: https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/gradle.properties")
-    }
-}
-
-def getFile(String relativePath) {
-    return new File(projectDir, relativePath)
-}
-
 
 String javaSourceDir = "src/main/java/"
 String scalaSourceDir = "src/main/scala/"
@@ -524,4 +514,16 @@ static String getVersionHash(String buildScriptContent) {
 configure(updateBuildScript) {
     group = 'forgegradle'
     description = 'Updates the build script to the latest version'
+}
+
+// Helper methods
+
+def checkPropertyExists(String propertyName) {
+    if (project.hasProperty(propertyName) == false) {
+        throw new GradleException("This project requires a property \"" + propertyName + "\"! Please add it your \"gradle.properties\". You can find all properties and their description here: https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/gradle.properties")
+    }
+}
+
+def getFile(String relativePath) {
+    return new File(projectDir, relativePath)
 }
