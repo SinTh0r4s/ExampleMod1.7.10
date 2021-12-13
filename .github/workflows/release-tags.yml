@@ -43,3 +43,8 @@ jobs:
           prerelease: false
           title: "${{ env.RELEASE_VERSION }}"
           files: build/libs/*.jar
+
+      - name: Publish package
+        run: gradle publish -Pgroup=com.github.GTNewHorizons -Pversion="${{ env.RELEASE_VERSION }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
