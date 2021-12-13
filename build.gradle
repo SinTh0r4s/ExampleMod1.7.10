@@ -42,6 +42,7 @@ plugins {
     id("org.ajoberstar.grgit") version("3.1.1")
     id("com.github.johnrengelman.shadow") version("4.0.4")
     id("com.palantir.git-version") version("0.12.3")
+    id("maven-publish")
 }
 
 apply plugin: 'forge'
@@ -458,6 +459,20 @@ artifacts {
     if(apiPackage) {
         archives apiJar
     }
+}
+
+// publishing
+publishing {
+  repositories {
+    maven {
+      name = "GitHubPackages"
+      url = "https://maven.pkg.github.com/octocat/hello-world"
+      credentials {
+        username = System.getenv("GITHUB_ACTOR")
+        password = System.getenv("GITHUB_TOKEN")
+      }
+    }
+  }
 }
 
 // Updating
