@@ -4,13 +4,13 @@ if [[ -d "run/crash-reports" ]]; then
   exit 1
 fi
 
-if [[ grep --quiet "Fatal errors were detected" server.log ]]; then
+if grep --quiet "Fatal errors were detected" server.log; then
   echo "Fatal errors detected:"
   cat server.log
   exit 1
 fi
 
-if [[ grep --quiet "The state engine was in incorrect state ERRORED and forced into state SERVER_STOPPED" server.log ]]; then
+if grep --quiet "The state engine was in incorrect state ERRORED and forced into state SERVER_STOPPED" server.log; then
   echo "Server force stopped:"
   cat server.log
   exit 1
