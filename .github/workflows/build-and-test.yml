@@ -29,23 +29,17 @@ jobs:
 
     - name: Setup the workspace
       run: ./gradlew setupCIWorkspace
-    
+
     - name: Build the mod
       run: ./gradlew build
 
-    - name: Set repository owner and name
+    - name: Run server for 1 minute
       run: |
-        echo "REPOSITORY_OWNER=${GITHUB_REPOSITORY%/*}" >> $GITHUB_ENV
-        echo "REPOSITORY_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
+        mkdir run
+        echo "eula=true" > run/eula.txt  
+        timeout 60 ./gradlew runServer || true
 
-    - name: Publish package
-      run: ./gradlew publish
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        ARTIFACT_GROUP_ID: com.github.${{ env.REPOSITORY_OWNER }}
-        ARTIFACT_ID: "${{ env.REPOSITORY_NAME }}"
-        ARTIFACT_VERSION: "0.0.1-publish-test"
-        REPOSITORY_NAME: "${{ env.REPOSITORY_NAME }}"
-        REPOSITORY_OWNER: "${{ env.REPOSITORY_OWNER }}"
-    
-
+    - name: Test no crashes happend
+      run: |
+        chmod +x .github/scripts/test-no-crash-reports.sh
+        .github/scripts/test-no-crash-reports.sh
