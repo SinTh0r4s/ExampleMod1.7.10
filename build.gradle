@@ -472,8 +472,8 @@ publishing {
                 archives source: apiJar, classifier: "api"
             }
 
-            groupId = System.getenv("GROUP_ID") ?: group
-            artifactId = System.getenv("ARTIFACT_NAME") ?: project.name
+            groupId = System.getenv("ARTIFACT_GROUP_ID") ?: group
+            artifactId = System.getenv("ARTIFACT_ID") ?: project.name
             version = System.getenv("ARTIFACT_VERSION") ?: project.version
         }
     }
