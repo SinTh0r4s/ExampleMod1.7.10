@@ -464,9 +464,11 @@ artifacts {
 // publishing
 publishing {
   repositories {
+    String owner = System.getenv("REPOSITORY_OWNER")
+    String repositoryName = System.getenv("REPOSITORY_OWNER")
     maven {
       name = "GitHubPackages"
-      url = "https://maven.pkg.github.com/octocat/hello-world"
+      url = "https://maven.pkg.github.com/$owner/$repositoryName"
       credentials {
         username = System.getenv("GITHUB_ACTOR")
         password = System.getenv("GITHUB_TOKEN")
