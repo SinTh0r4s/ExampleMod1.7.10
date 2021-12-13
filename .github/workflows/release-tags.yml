@@ -44,10 +44,15 @@ jobs:
           title: "${{ env.RELEASE_VERSION }}"
           files: build/libs/*.jar
 
+      - name: Set repository owner and name
+        run: |
+          echo "REPOSITORY_OWNER=${GITHUB_REPOSITORY%/*}" >> $GITHUB_ENV
+          echo "REPOSITORY_NAME=${GITHUB_REPOSITORY#*/} >> $GITHUB_ENV
+
       - name: Publish package
-        run: ./gradlew publish -Pgroup=com.github."$REPOISITORY_OWNER" -Pversion="${{ env.RELEASE_VERSION }}"
+        run: ./gradlew publish -Pgroup=com.github."$REPOSITORY_OWNER" -Pversion="$VERSION"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPOSITORY_NAME: ${GITHUB_REPOSITORY#*/}
-          REPOISITORY_OWNER: ${GITHUB_REPOSITORY%/*}
-
+          REPOSITORY_NAME: "${{ env.REPOSITORY_NAME }}"
+          REPOSITORY_OWNER: "${{ env.REPOSITORY_OWNER }}"
+          VERSION: "${{ env.RELEASE_VERSION }}"
