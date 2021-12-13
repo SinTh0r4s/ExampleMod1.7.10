@@ -463,18 +463,26 @@ artifacts {
 
 // publishing
 publishing {
-  repositories {
-    String owner = System.getenv("REPOSITORY_OWNER")
-    String repositoryName = System.getenv("REPOSITORY_NAME")
-    maven {
-      name = "GitHubPackages"
-      url = "https://maven.pkg.github.com/$owner/$repositoryName"
-      credentials {
-        username = System.getenv("GITHUB_ACTOR")
-        password = System.getenv("GITHUB_TOKEN")
-      }
+    repositories {
+        String owner = System.getenv("REPOSITORY_OWNER")
+        String repositoryName = System.getenv("REPOSITORY_NAME")
+        String githubUser = System.getenv("GITHUB_ACTOR")
+        String githubToken = System.getenv("GITHUB_TOKEN")
+        boolean isInGithubCIEnvironment = owner != null && repositoryName != null && githubUser != null && githubToken != null
+        
+        if (isInGithubCIEnvironment) {
+            maven {
+                name = "GitHubPackages"
+                url = "https://maven.pkg.github.com/$owner/$repositoryName"
+                credentials {
+                    username = githubUser
+                    password = githubToken
+                }
+            }
+        } else {
+            print("Assuming not being in CI environment: skipping github publishing configuration")
+        }
     }
-  }
 }
 
 // Updating
