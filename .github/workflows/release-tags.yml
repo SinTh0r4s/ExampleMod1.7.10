@@ -45,7 +45,9 @@ jobs:
           files: build/libs/*.jar
 
       - name: Publish package
-        run: ./gradlew publish -Pgroup=com.github."${GITHUB_REPOSITORY%/*}" -Pversion="${{ env.RELEASE_VERSION }}"
+        run: ./gradlew publish -Pgroup=com.github."$REPOISITORY_OWNER" -Pversion="${{ env.RELEASE_VERSION }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY_NAME: ${GITHUB_REPOSITORY#*/}
+          REPOISITORY_OWNER: ${GITHUB_REPOSITORY%/*}
 
