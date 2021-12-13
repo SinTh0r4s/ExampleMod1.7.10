@@ -43,3 +43,8 @@ jobs:
       run: |
         chmod +x .github/scripts/test-no-crash-reports.sh
         .github/scripts/test-no-crash-reports.sh
+    
+    - name: Publish package
+      run: gradle publish -Pgroup=com.github."${GITHUB_REPOSITORY%/*}" -Pversion=0.0.1-publish-test
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
