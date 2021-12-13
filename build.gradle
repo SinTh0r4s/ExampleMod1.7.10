@@ -465,7 +465,7 @@ artifacts {
 publishing {
     publications {
         maven(MavenPublication) {
-            from components.java
+            artifact source: jar
             artifact source: sourcesJar, classifier: "src"
             artifact source: devJar, classifier: "dev"
             if (apiPackage) {
