@@ -33,18 +33,10 @@ jobs:
     - name: Build the mod
       run: ./gradlew build
 
-    - name: Run server for 1 minute
-      run: |
-        mkdir run
-        echo "eula=true" > run/eula.txt  
-        timeout 60 ./gradlew runServer || true
-
-    - name: Test no crashes happend
-      run: |
-        chmod +x .github/scripts/test-no-crash-reports.sh
-        .github/scripts/test-no-crash-reports.sh
-    
     - name: Publish package
-      run: gradle publish -Pgroup=com.github."${GITHUB_REPOSITORY%/*}" -Pversion=0.0.1-publish-test
+      run: ./gradlew publish -Pgroup=com.github."${GITHUB_REPOSITORY%/*}" -Pversion=0.0.1-publish-test
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    
+
