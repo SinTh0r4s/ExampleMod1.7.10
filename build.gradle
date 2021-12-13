@@ -463,6 +463,17 @@ artifacts {
 
 // publishing
 publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            artifact source: sourcesJar, classifier: "src"
+            artifact source: devJar, classifier: "dev"
+            if (apiPackage) {
+                archives source: apiJar, classifier: "api"
+            }
+        }
+    }
+    
     repositories {
         maven {
             String owner = System.getenv("REPOSITORY_OWNER") ?: "Unknown"
