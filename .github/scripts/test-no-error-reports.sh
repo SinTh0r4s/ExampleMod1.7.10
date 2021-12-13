@@ -1,5 +1,4 @@
-directory="run/crash-reports"
-if [[ -d $directory ]]; then
+if [[ -d "run/crash-reports" ]]; then
   echo "Crash reports detected:"
   cat $directory/*
   exit 1
