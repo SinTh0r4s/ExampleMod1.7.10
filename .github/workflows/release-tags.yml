@@ -47,7 +47,7 @@ jobs:
       - name: Set repository owner and name
         run: |
           echo "REPOSITORY_OWNER=${GITHUB_REPOSITORY%/*}" >> $GITHUB_ENV
-          echo "REPOSITORY_NAME=${GITHUB_REPOSITORY#*/} >> $GITHUB_ENV
+          echo "REPOSITORY_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
 
       - name: Publish package
         run: ./gradlew publish -Pgroup=com.github."$REPOSITORY_OWNER" -Pversion="$VERSION"
