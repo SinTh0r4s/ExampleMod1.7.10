@@ -465,7 +465,7 @@ artifacts {
 publishing {
   repositories {
     String owner = System.getenv("REPOSITORY_OWNER")
-    String repositoryName = System.getenv("REPOSITORY_OWNER")
+    String repositoryName = System.getenv("REPOSITORY_NAME")
     maven {
       name = "GitHubPackages"
       url = "https://maven.pkg.github.com/$owner/$repositoryName"
