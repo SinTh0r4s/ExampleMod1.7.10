@@ -471,6 +471,10 @@ publishing {
             if (apiPackage) {
                 archives source: apiJar, classifier: "api"
             }
+
+            groupId = System.getenv("GROUP_ID") ?: group
+            artifactId = System.getenv("ARTIFACT_NAME") ?: project.name
+            version = System.getenv("ARTIFACT_VERSION") ?: project.version
         }
     }
     

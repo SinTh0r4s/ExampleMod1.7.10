@@ -50,9 +50,11 @@ jobs:
           echo "REPOSITORY_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
 
       - name: Publish package
-        run: ./gradlew publish -Pgroup=com.github."$REPOSITORY_OWNER" -Pversion="$VERSION"
+        run: ./gradlew publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPOSITORY_NAME: "${{ env.REPOSITORY_NAME }}"
           REPOSITORY_OWNER: "${{ env.REPOSITORY_OWNER }}"
-          VERSION: "${{ env.RELEASE_VERSION }}"
+          GROUP_ID: com.github.${{ env.REPOSITORY_NAME }}
+          REPOSITORY_NAME: "${{ env.REPOSITORY_NAME }}"
+          ARTIFACT_NAME: "${{ env.REPOSITORY_NAME }}"
+          ARTIFACT_VERSION: "${{ env.RELEASE_VERSION }}"
