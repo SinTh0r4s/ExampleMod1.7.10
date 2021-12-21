@@ -195,7 +195,9 @@ if(file("addon.gradle").exists()) {
 apply from: 'repositories.gradle'
 
 configurations {
-    implementation.extendsFrom(shadowImplementation)
+    implementation.extendsFrom(shadowImplementation)  // TODO: remove after all uses are refactored
+    implementation.extendsFrom(shadowCompile)
+    implementation.extendsFrom(shadeCompile)
 }
 
 repositories {
@@ -261,16 +263,28 @@ task relocateShadowJar(type: ConfigureShadowRelocation) {
 }
 
 shadowJar {
+    project.configurations.shadeCompile.each { dep ->
+        from(project.zipTree(dep)) {
+            exclude 'META-INF', 'META-INF/**'
+        }
+    }
+
     manifest {
         attributes(getManifestAttributes())
     }
 
     minimize()  // This will only allow shading for actually used classes
-    configurations = [project.configurations.shadowImplementation]
+    configurations = [project.configurations.shadowImplementation, project.configurations.shadowCompile]
     dependsOn(relocateShadowJar)
 }
 
 jar {
+    project.configurations.shadeCompile.each { dep ->
+        from(project.zipTree(dep)) {
+            exclude 'META-INF', 'META-INF/**'
+        }
+    }
+
     manifest {
         attributes(getManifestAttributes())
     }
@@ -401,6 +415,12 @@ task sourcesJar(type: Jar) {
 }
 
 task shadowDevJar(type: ShadowJar) {
+    project.configurations.shadeCompile.each { dep ->
+        from(project.zipTree(dep)) {
+            exclude 'META-INF', 'META-INF/**'
+        }
+    }
+
     from sourceSets.main.output
     getArchiveClassifier().set("dev")
 
@@ -409,7 +429,7 @@ task shadowDevJar(type: ShadowJar) {
     }
 
     minimize()  // This will only allow shading for actually used classes
-    configurations = [project.configurations.shadowImplementation]
+    configurations = [project.configurations.shadowImplementation, project.configurations.shadowCompile]
 }
 
 task relocateShadowDevJar(type: ConfigureShadowRelocation) {
@@ -424,6 +444,12 @@ task circularResolverJar(type: Jar) {
 }
 
 task devJar(type: Jar) {
+    project.configurations.shadeCompile.each { dep ->
+        from(project.zipTree(dep)) {
+            exclude 'META-INF', 'META-INF/**'
+        }
+    }
+
     from sourceSets.main.output
     getArchiveClassifier().set("dev")
 
